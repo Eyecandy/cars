@@ -72,5 +72,9 @@
       </plugins>
     </pluginManagement>
   </build>
-  <modules> <module>webapp</module> </modules>
+  <modules> 
+  	<module>webapp</module>
+	<module>mailsender</module>
+ </modules>
+  
 </project>
