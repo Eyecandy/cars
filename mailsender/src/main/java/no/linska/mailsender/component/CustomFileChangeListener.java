@@ -1,5 +1,6 @@
 package no.linska.mailsender.component;
 
+import lombok.AllArgsConstructor;
 import org.springframework.boot.devtools.filewatch.ChangedFile;
 import org.springframework.boot.devtools.filewatch.ChangedFiles;
 import org.springframework.boot.devtools.filewatch.FileChangeListener;
@@ -12,8 +13,13 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Set;
 
+
 @Component
+@AllArgsConstructor
 public class CustomFileChangeListener implements FileChangeListener {
+
+
+    private FileHandlerService fileHandlerService;
 
     @Override
     public void onChange(Set<ChangedFiles> changeSet) {
@@ -23,6 +29,10 @@ public class CustomFileChangeListener implements FileChangeListener {
                       && !isLocked(cfile.getFile().toPath())) {
                     //send mails
                     //move to mailssent directory
+                    fileHandlerService.moveFile(cfile.getFile(), "/Users/joakim/Documents/customers/mailsent/");
+
+
+
                 }
             }
         }
