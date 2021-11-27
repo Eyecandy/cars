@@ -1,9 +1,13 @@
 package no.linska.mailsender.component;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import no.linska.mailsender.service.EmailService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.devtools.filewatch.ChangedFile;
 import org.springframework.boot.devtools.filewatch.ChangedFiles;
 import org.springframework.boot.devtools.filewatch.FileChangeListener;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -15,11 +19,12 @@ import java.util.Set;
 
 
 @Component
-@AllArgsConstructor
 public class CustomFileChangeListener implements FileChangeListener {
-
-
+    @Autowired
     private FileHandlerService fileHandlerService;
+
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public void onChange(Set<ChangedFiles> changeSet) {
@@ -27,11 +32,10 @@ public class CustomFileChangeListener implements FileChangeListener {
             for(ChangedFile cfile: cfiles.getFiles()) {
                 if(cfile.getType().equals(ChangedFile.Type.ADD)
                       && !isLocked(cfile.getFile().toPath())) {
-                    //send mails
-                    //move to mailssent directory
+
+                    emailService.sendMessageWithAttachment("volswagenbilforhandler@gmail.com", cfile.getFile());
+                    //emailService.sendSimpleMessage("volswagenbilforhandler@gmail.com","hi","text");
                     fileHandlerService.moveFile(cfile.getFile(), "/Users/joakim/Documents/customers/mailsent/");
-
-
 
                 }
             }

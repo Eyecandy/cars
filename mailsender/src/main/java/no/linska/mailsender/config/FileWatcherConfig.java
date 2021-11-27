@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.linska.mailsender.component.CustomFileChangeListener;
 import no.linska.mailsender.properties.FileWatcherProperty;
 import no.linska.mailsender.component.FileHandlerServiceImpl;
+import no.linska.mailsender.service.EmailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.devtools.filewatch.FileSystemWatcher;
 import org.springframework.context.annotation.Bean;
@@ -22,14 +23,17 @@ public class FileWatcherConfig {
     @Autowired
     private FileWatcherProperty fileWatcherProperty;
 
+    @Autowired
+    CustomFileChangeListener customFileChangeListener;
+
     @Bean
     public FileSystemWatcher fileSystemWatcher() {
         FileSystemWatcher fileSystemWatcher = new FileSystemWatcher(true, Duration.ofMillis(5000L), Duration.ofMillis(3000L));
         Iterable<File> iterable = List.of(new File(fileWatcherProperty.getDirPath()));
         fileSystemWatcher.addSourceDirectories(iterable);
-        fileSystemWatcher.addListener(new CustomFileChangeListener(new FileHandlerServiceImpl()));
+        fileSystemWatcher.addListener(customFileChangeListener);
         fileSystemWatcher.start();
-        System.out.println("started fileSystemWatcher");
+        log.info("started FileSystemWatcher");
         return fileSystemWatcher;
     }
 
