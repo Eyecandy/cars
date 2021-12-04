@@ -1,6 +1,5 @@
 package no.linska.webapp.exception;
 
-import no.linska.webapp.exception.StorageException;
 
 public class StorageFileNotFoundException extends StorageException {
 

@@ -1,13 +1,8 @@
 package no.linska.webapp.controller;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.stream.Collectors;
-
 import no.linska.webapp.exception.StorageFileNotFoundException;
-import no.linska.webapp.properties.StorageProperties;
-import no.linska.webapp.service.EmailService;
 import no.linska.webapp.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -26,25 +21,16 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
-
 @Controller
 public class FileUploadController {
 
-    @Autowired
     private final StorageService storageService;
-    @Autowired
-    private final EmailService emailService;
-
-
-
-
 
     @Autowired
-    public FileUploadController(StorageService storageService,
-                                EmailService emailService) {
+    public FileUploadController(StorageService storageService) {
         this.storageService = storageService;
-        this.emailService = emailService;
     }
+
 
     @GetMapping("/")
     public String listUploadedFiles(Model model) throws IOException {
@@ -72,11 +58,6 @@ public class FileUploadController {
                                    RedirectAttributes redirectAttributes) {
 
         storageService.store(file);
-
-
-        emailService.sendSimpleMessage("volswagenbilforhandler@gmail.com",
-                "Hi again!",
-                "Hi mr. App Test, glad to see you again :)");
 
         redirectAttributes.addFlashAttribute("message",
                 "You successfully uploaded " + file.getOriginalFilename() + "!");
