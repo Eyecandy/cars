@@ -1,13 +1,11 @@
 package no.linska.mailsender.component;
 
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
+
 import no.linska.mailsender.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.devtools.filewatch.ChangedFile;
 import org.springframework.boot.devtools.filewatch.ChangedFiles;
 import org.springframework.boot.devtools.filewatch.FileChangeListener;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -34,8 +32,7 @@ public class CustomFileChangeListener implements FileChangeListener {
                       && !isLocked(cfile.getFile().toPath())) {
 
                     emailService.sendMessageWithAttachment("vw@linska.local", cfile.getFile());
-                    //emailService.sendSimpleMessage("volswagenbilforhandler@gmail.com","hi","text");
-                    fileHandlerService.moveFile(cfile.getFile(), "/Users/joakim/Documents/customers/mailsent/");
+                    fileHandlerService.moveFile(cfile.getFile());
 
                 }
             }
@@ -49,5 +46,4 @@ public class CustomFileChangeListener implements FileChangeListener {
             return true;
         }
     }
-
 }

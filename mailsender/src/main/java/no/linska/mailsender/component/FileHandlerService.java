@@ -8,6 +8,6 @@ import java.io.File;
 @Service
 public interface FileHandlerService {
 
-    void moveFile(File file, String destination);
+    void moveFile(File file);
 
 }
