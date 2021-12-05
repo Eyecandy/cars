@@ -55,7 +55,7 @@
 						<phase>process-resources</phase>
 						<configuration>
 							<target>
-								<mkdir dir="target/nfsfsprod"/>
+								<mkdir dir="target/customer"/>
 							</target>
 						</configuration>
 						<goals>
