@@ -13,7 +13,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @EnableConfigurationProperties(value = StorageProperties.class)
-@TestPropertySource("classpath:application.properties")
+@TestPropertySource("classpath:application-test.properties")
 public class StoragePropertiesTest {
 
     @Autowired
@@ -21,7 +21,7 @@ public class StoragePropertiesTest {
 
     @Test
     public void givenUserDefinedPOJO_whenBindingPropertiesFile_thenAllFieldsAreSet() {
-        Assert.assertEquals("/test/path",storageProperties.getUploadDir());
+        Assert.assertEquals("/test/path/",storageProperties.getUploadDir());
 
     }
 
