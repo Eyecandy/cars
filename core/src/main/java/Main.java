@@ -1,5 +1,8 @@
 public class Main {
-    public static void main(String[] args) {
-        System.out.println("hio");
+
+    String greeting = "Greetings from core module";
+
+    public String getGreeting() {
+        return greeting;
     }
 }
