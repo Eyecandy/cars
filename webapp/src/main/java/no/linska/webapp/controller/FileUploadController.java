@@ -2,7 +2,10 @@ package no.linska.webapp.controller;
 
 import java.io.IOException;
 import java.util.stream.Collectors;
+
+import no.linska.webapp.entity.Customer;
 import no.linska.webapp.exception.StorageFileNotFoundException;
+import no.linska.webapp.repository.CustomerRepository;
 import no.linska.webapp.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -27,6 +30,9 @@ public class FileUploadController {
     private final StorageService storageService;
 
     @Autowired
+    CustomerRepository customerRepository;
+
+    @Autowired
     public FileUploadController(StorageService storageService) {
         this.storageService = storageService;
     }
@@ -34,6 +40,7 @@ public class FileUploadController {
 
     @GetMapping("/")
     public String listUploadedFiles(Model model) throws IOException {
+
 
 
         model.addAttribute("files", storageService.loadAll().map(
@@ -56,7 +63,10 @@ public class FileUploadController {
     @PostMapping("/")
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
                                    RedirectAttributes redirectAttributes) {
-
+        System.out.println(customerRepository.findAll());
+        Customer customer = new Customer("joa","nil");
+        customerRepository.save(customer);
+        System.out.println(customerRepository.findAll());
         storageService.store(file);
 
         redirectAttributes.addFlashAttribute("message",
