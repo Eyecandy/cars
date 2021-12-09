@@ -1,8 +1,13 @@
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
+
+@SpringBootApplication
+@ComponentScan("no.linska.core")
 public class Main {
 
-    String greeting = "Greetings from core module";
-
-    public String getGreeting() {
-        return greeting;
-    }
+         public static void main(String[] args) {
+            SpringApplication.run(Main.class, args);
+     }
 }
+
