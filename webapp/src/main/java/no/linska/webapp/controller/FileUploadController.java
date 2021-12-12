@@ -64,7 +64,7 @@ public class FileUploadController {
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
                                    RedirectAttributes redirectAttributes) {
         System.out.println(customerRepository.findAll());
-        Customer customer = new Customer("joa","nil");
+        Customer customer = new Customer("joa","nil","mail@mail.com");
         customerRepository.save(customer);
         System.out.println(customerRepository.findAll());
         storageService.store(file);
