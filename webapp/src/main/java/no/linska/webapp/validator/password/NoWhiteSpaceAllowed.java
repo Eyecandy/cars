@@ -12,10 +12,10 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Documented
-@Constraint(validatedBy = PasswordLengthConstraint.class)
+@Constraint(validatedBy = WhiteSpaceValidator.class)
 @Target({ TYPE, FIELD, ANNOTATION_TYPE })
 @Retention(RUNTIME)
-public @interface ValidPasswordLength {
+public @interface NoWhiteSpaceAllowed {
 
     String message();
 
@@ -23,8 +23,5 @@ public @interface ValidPasswordLength {
 
     Class<? extends Payload>[] payload() default {};
 
-    Integer min = 8;
-
-    Integer max = 30;
 
 }

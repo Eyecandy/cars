@@ -4,12 +4,8 @@ import no.linska.webapp.entity.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -26,27 +22,22 @@ public class RegistrationController {
     }
 
 
-    @RequestMapping(value = "/process_register", method = RequestMethod.POST)
-    public ModelAndView createNewUser(@Valid @ModelAttribute("user") User user,
+    @PostMapping(value = "/process_register")
+    public ModelAndView createNewUser(@Valid User user,
                                       BindingResult bindingResult) {
 
-        System.out.println(user.getFirstName());
-        System.out.println(user.getPassword());
-        System.out.println(user.getLastName());
-        System.out.println(user.getEmail());
+        ModelAndView modelAndView = new ModelAndView();
         if (bindingResult.hasErrors()) {
-            for (ObjectError error : bindingResult.getAllErrors()) { // 1.
-                String fieldErrors = ((FieldError) error).getField(); // 2.
-                System.out.println(fieldErrors);
-            }
+            modelAndView.setViewName("registration_form");
+            modelAndView.addObject("user",user);
+            return modelAndView;
         }
 
-
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("successMessage", "Your Registration is complete");
-        modelAndView.addObject("user", new User());
         modelAndView.setViewName("registration_complete");
-
+        modelAndView.addObject("successMessage",
+                String.format("Bruker %s er registrert hos Linska, " +
+                        "sjekk innboksen din for å verifisere kontoen ", user.getEmail()));
+        modelAndView.addObject("");
         return modelAndView;
     }
 

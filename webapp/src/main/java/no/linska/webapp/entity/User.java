@@ -1,13 +1,15 @@
 package no.linska.webapp.entity;
 
 import no.linska.webapp.validator.email.ValidEmail;
-import no.linska.webapp.validator.password.ValidPassword;
+import no.linska.webapp.validator.password.NoWhiteSpaceAllowed;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 
 @Entity
@@ -21,11 +23,15 @@ public class User {
     private String firstName;
     @NotNull
     private String lastName;
-    @NotNull
-    @ValidEmail(message = "e-post adresse er ikke i riktig, sjekk at den stemmer")
+
+
+    @NotBlank(message = "email kan ikke være tom")
+    @ValidEmail
     private String email;
-    @ValidPassword(message =
-            "Passord må ha minst ett tall, en liten bokstav, ett tall og må være mellom 8 - 30 tegn")
+
+    @Size(min = 8,max = 30, message = "Passordet må være mellom 8 og 30 tegn")
+    @NotBlank(message = "Passordet kan ikke være tomt")
+    @NoWhiteSpaceAllowed(message = "Mellomrom kan ikke brukes i passord")
     private String password;
 
     private String matchingPassword;
