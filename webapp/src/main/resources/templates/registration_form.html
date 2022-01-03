@@ -12,62 +12,46 @@
 
     <form th:action="@{/process_register}" th:object="${user}"
           method="post" style="max-width: 600px; margin: 0 auto;">
-        <div>
-            <h1>User Registration - Sign Up</h1>
-            <div th:if="${#fields.hasErrors('global')}">
-                <h3>Global errors:</h3>
-                <p th:each="err : ${#fields.errors('global')}" th:text="${err}" class="error" />
-            </div>
 
-        </div>
+
+
         <div class="m-3">
             <div class="form-group row">
                 <label class="col-4 col-form-label">E-mail: </label>
                 <div class="col-8">
-                    <input type="email" th:field="*{email}" class="form-control" required />
+                    <input type="Epost" th:field="*{email}" class="form-control" required />
                     <p th:each="error : ${#fields.errors('email')}"
                        th:text="${error}">Validation error</p>
                 </div>
             </div>
 
             <div class="form-group row">
-                <label class="col-4 col-form-label">Password: </label>
+                <label class="col-4 col-form-label">Passord: </label>
                 <div class="col-8">
                     <input type="password" th:field="*{password}" class="form-control"/>
                     <p th:each="error : ${#fields.errors('password')}"
                        th:text="${error}">Validation error</p>
                 </div>
-                <div class="form-group row">
-                    <label class="col-4 col-form-label">Gjenta Passord: </label>
-                    <div class="col-8">
-                        <input type="matchingPassword" th:field="*{matchingPassword}" class="form-control"/>
-                        <p th:each="error : ${#fields.errors('matchingPassword')}"
-                           th:text="${error}">Validation error</p>
-                    </div>
-
-
-
-</script>
-            </div>
+                </div>
 
             <div class="form-group row">
-                <label class="col-4 col-form-label">First Name: </label>
+                <label class="col-4 col-form-label">Gjenta Password: </label>
                 <div class="col-8">
-                    <input type="text" th:field="*{firstName}" class="form-control"/>
+                    <input type="password" th:field="*{matchingPassword}" class="form-control"/>
+                    <p th:each="error : ${#fields.errors('matchingPassword')}"
+                       th:text="${error}">Validation error</p>
                 </div>
             </div>
+            <div th:if="${#fields.hasErrors('global')}">
+                <h3>Feil oppstod:</h3>
+                <p th:each="err : ${#fields.errors('global')}" th:text="${err}" class="error" />
+            </div>
 
-            <div class="form-group row">
-                <label class="col-4 col-form-label">Last Name: </label>
-                <div class="col-8">
-                    <input type="text" th:field="*{lastName}" class="form-control"/>
+
+                <div>
+                    <button type="submit" class="btn btn-primary">Registrer Bruker</button>
                 </div>
             </div>
-
-            <div>
-                <button type="submit" class="btn btn-primary">Customer signup</button>
-            </div>
-        </div>
     </form>
 </div>
 </body>

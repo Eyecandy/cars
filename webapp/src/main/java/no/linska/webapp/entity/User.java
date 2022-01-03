@@ -28,7 +28,7 @@ public class User {
 
 
     @Column(name = "email",unique = true)
-    @NotBlank(message = "email kan ikke være tom")
+    @NotBlank(message = "Epost adresse kan ikke være tom")
     @ValidEmail
     private String email;
 
