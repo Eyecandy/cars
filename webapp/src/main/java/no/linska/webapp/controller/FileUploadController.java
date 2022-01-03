@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.stream.Collectors;
 
 import no.linska.webapp.exception.StorageFileNotFoundException;
-import no.linska.webapp.repository.CustomerRepository;
+import no.linska.webapp.repository.UserRepository;
 import no.linska.webapp.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -29,7 +29,7 @@ public class FileUploadController {
     private final StorageService storageService;
 
     @Autowired
-    CustomerRepository customerRepository;
+    UserRepository userRepository;
 
     @Autowired
     public FileUploadController(StorageService storageService) {

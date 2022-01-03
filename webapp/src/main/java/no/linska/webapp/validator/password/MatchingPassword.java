@@ -1,5 +1,6 @@
 package no.linska.webapp.validator.password;
 
+
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.Documented;
@@ -12,16 +13,17 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Documented
-@Constraint(validatedBy = NoWhiteSpaceValidator.class)
+@Constraint(validatedBy = MatchingPasswordValidator.class)
 @Target({ TYPE, FIELD, ANNOTATION_TYPE })
 @Retention(RUNTIME)
-public @interface NoWhiteSpaceAllowed {
+public @interface MatchingPassword {
 
     String message();
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
+
 
 
 }

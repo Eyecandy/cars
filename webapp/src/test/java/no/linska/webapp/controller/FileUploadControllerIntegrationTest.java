@@ -22,6 +22,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -30,8 +31,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
-@TestPropertySource(properties = {"MAIL_USERNAME=3025",
-        "MAIL_PASSWORD=localhost"})
 public class FileUploadControllerIntegrationTest {
 
     @Autowired
@@ -69,6 +68,18 @@ public class FileUploadControllerIntegrationTest {
                 .willThrow(StorageFileNotFoundException.class);
 
         this.mvc.perform(get("/files/test.txt")).andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void lol() throws Exception {
+        String email = "user@nia.com";
+        String password = "benakiafagfa";
+        String request = String
+                .format("/process_register?email=%s&password=%s", email,password);
+
+        System.out.println(this.mvc);
+        this.mvc.perform(post(request))
+                .andExpect(status().isOk());
     }
 
 }

@@ -1,4 +1,9 @@
 package no.linska.webapp.service;
 
-public class RegistrationService {
+import no.linska.webapp.entity.User;
+
+public interface RegistrationService {
+
+    void register(User user);
+
 }

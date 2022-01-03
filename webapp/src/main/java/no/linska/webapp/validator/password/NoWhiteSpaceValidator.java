@@ -14,7 +14,7 @@ import static java.lang.String.format;
 
 
 @Configuration
-public class WhiteSpaceValidator implements ConstraintValidator<NoWhiteSpaceAllowed, String> {
+public class NoWhiteSpaceValidator implements ConstraintValidator<NoWhiteSpaceAllowed, String> {
 
 
     Properties properties;
