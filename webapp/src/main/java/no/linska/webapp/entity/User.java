@@ -20,6 +20,11 @@ public class User {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 
+    @Column(name = "enabled")
+    private boolean enabled = true;
+
+    private String role = "customer";
+
     @Column(name = "firstname")
     private String firstName;
 

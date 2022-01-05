@@ -17,9 +17,9 @@
 
         <div class="m-3">
             <div class="form-group row">
-                <label class="col-4 col-form-label">E-mail: </label>
+                <label class="col-4 col-form-label">E-post: </label>
                 <div class="col-8">
-                    <input type="Epost" th:field="*{email}" class="form-control" required />
+                    <input type="email" th:field="*{email}" class="form-control" required />
                     <p th:each="error : ${#fields.errors('email')}"
                        th:text="${error}">Validation error</p>
                 </div>

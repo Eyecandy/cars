@@ -1,13 +1,12 @@
 package no.linska.webapp.controller;
 
 import no.linska.webapp.entity.User;
-import no.linska.webapp.service.RegistrationServiceImpl;
+import no.linska.webapp.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -19,7 +18,7 @@ import javax.validation.Valid;
 public class RegistrationController {
 
     @Autowired
-    RegistrationServiceImpl registrationService;
+    UserServiceImpl registrationService;
 
 
 
