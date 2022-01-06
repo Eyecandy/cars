@@ -12,12 +12,12 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-@MatchingPassword(message = "passwords must match")
+@MatchingPassword(message = "Passordene må matches")
 @Entity(name = "user_account")
 public class User {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE)
     private Long id;
 
     @Column(name = "enabled")
@@ -31,8 +31,7 @@ public class User {
     @Column(name = "lastname")
     private String lastName;
 
-
-    @Column(name = "email",unique = true)
+    @Column(unique = true)
     @NotBlank(message = "Epost adresse kan ikke være tom")
     @ValidEmail
     private String email;

@@ -1,16 +1,23 @@
 package no.linska.webapp.controller;
 
 import no.linska.webapp.repository.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+
+
+
 
 @AutoConfigureMockMvc
 @SpringBootTest
+@ActiveProfiles("test")
 public class RegistrationControllerIntegrationTest {
 
     @Autowired
@@ -19,7 +26,28 @@ public class RegistrationControllerIntegrationTest {
     @Autowired
     UserRepository userRepository;
 
-    String REQUEST = "/process_register?email=%s&password=%s&matchingPassword=%s";
+    String REQUEST = "/register?email=%s&password=%s&matchingPassword=%s";
+
+
+    @BeforeEach
+    void tearDown() {
+        userRepository.deleteAll();
+    }
+
+
+    @Test
+    void csfrIsEnabled_onRegistration() throws Exception {
+        String validEmail = "user@server.com";
+        String validPassword = "between_8_and_30_chars";
+        String nonMatchingPassword = "between_8_and_30_chars";
+
+
+        String request = String
+                .format(REQUEST, validEmail,validPassword,nonMatchingPassword);
+
+        this.mvc.perform(post(request))
+                .andExpect(status().isForbidden());
+     }
 
     @Test
     void shouldRegisterUser() throws Exception {
@@ -29,11 +57,9 @@ public class RegistrationControllerIntegrationTest {
         String request = String
                 .format(REQUEST, validEmail,validPassword,validPassword);
 
-        this.mvc.perform(post(request))
+        this.mvc.perform(post(request).with(csrf()))
                 .andExpect(status().isOk());
     }
-
-
 
     @Test
     void shouldNotRegister_whenPasswordToShort() throws Exception {
@@ -42,7 +68,7 @@ public class RegistrationControllerIntegrationTest {
         String request = String
                 .format(REQUEST, validEmail,validPassword,validPassword);
 
-        this.mvc.perform(post(request))
+        this.mvc.perform(post(request).with(csrf()))
                 .andExpect(status().isBadRequest());
 
     }
@@ -52,9 +78,9 @@ public class RegistrationControllerIntegrationTest {
         String invalidEmail = "user@server";
         String validPassword = "between_8_and_30_chars";
         String request = String
-                .format("/process_register?email=%s&password=%s", invalidEmail,validPassword,validPassword);
+                .format("/register?email=%s&password=%s", invalidEmail,validPassword,validPassword);
 
-        this.mvc.perform(post(request))
+        this.mvc.perform(post(request).with(csrf()))
                 .andExpect(status().isBadRequest());
     }
 
@@ -65,13 +91,11 @@ public class RegistrationControllerIntegrationTest {
         var request = String
                 .format(REQUEST, validEmail,validPassword,validPassword);
 
-
-
-        this.mvc.perform(post(request))
+        this.mvc.perform(post(request).with(csrf()))
                 .andExpect(status().isOk());
 
-        this.mvc.perform(post(request))
-                .andExpect(status().isOk());
+        this.mvc.perform(post(request).with(csrf()))
+                .andExpect(status().isConflict());
 
     }
 
@@ -85,11 +109,7 @@ public class RegistrationControllerIntegrationTest {
         String request = String
                 .format(REQUEST, validEmail,validPassword,nonMatchingPassword);
 
-        this.mvc.perform(post(request))
+        this.mvc.perform(post(request).with(csrf()))
                 .andExpect(status().isBadRequest());
-
-
-
     }
-
 }

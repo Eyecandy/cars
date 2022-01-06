@@ -14,9 +14,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void register(User user) {
-       if (userRepository.findByEmail(user.getEmail()).isEmpty()) {
-           userRepository.save(user);
-       }
+        userRepository.save(user);
     }
 
 

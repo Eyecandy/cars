@@ -3,6 +3,7 @@ package no.linska.webapp.controller;
 import no.linska.webapp.entity.User;
 import no.linska.webapp.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,11 @@ public class RegistrationController {
     @Autowired
     UserServiceImpl registrationService;
 
+    final String USER_ALREADY_EXISTS_KEY = "reg_conflict";
+    final String USER_ALREADY_EXISTS_ERR_MSG = "Bruker er %s finnes allerede";
+    final String USER_REGISTERED_SUCCESS_KEY = "reg_success";
+    final String USER_REGISTERED_SUCCESS_MSG = "Bruker %s er registrert hos Linska, sjekk innboksen din for å verifisere kontoen";
+
 
 
     @GetMapping("/register")
@@ -30,7 +36,7 @@ public class RegistrationController {
     }
 
 
-    @PostMapping(value = "/process_register")
+    @PostMapping(value = "/register")
     public ModelAndView createNewUser(@Valid User user,
                                       BindingResult bindingResult) {
 
@@ -42,13 +48,24 @@ public class RegistrationController {
             modelAndView.setStatus(HttpStatus.BAD_REQUEST);
             return modelAndView;
         }
-
-        registrationService.register(user);
+        try {
+            registrationService.register(user); }
+        catch (DataIntegrityViolationException e) {
+            modelAndView.setViewName("registration_form");
+            modelAndView.addObject("user",user);
+            modelAndView.setStatus(HttpStatus.CONFLICT);
+            modelAndView
+                    .addObject(USER_ALREADY_EXISTS_KEY,
+                            String.format(USER_ALREADY_EXISTS_ERR_MSG,
+                                    user.getEmail()
+                            )
+                );
+            return modelAndView;
+        }
 
         modelAndView.setViewName("registration_complete");
-        modelAndView.addObject("successMessage",
-                String.format("Bruker %s er registrert hos Linska, " +
-                        "sjekk innboksen din for å verifisere kontoen ", user.getEmail()));
+        modelAndView.addObject(USER_REGISTERED_SUCCESS_KEY,
+                String.format(USER_REGISTERED_SUCCESS_MSG, user.getEmail()));
         modelAndView.addObject("");
         return modelAndView;
     }

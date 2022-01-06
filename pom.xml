@@ -21,21 +21,28 @@
     <lombok.version>1.18.20</lombok.version>
     <postgres.version>42.3.1</postgres.version>
     <passay.version>1.6.1</passay.version>
+    <spring.security.version>5.6.1</spring.security.version>
+    <h2db.version>2.0.206</h2db.version>
   </properties>
 
 
   <dependencyManagement>
     <dependencies>
+
+      <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
+      <dependency>
+        <groupId>com.h2database</groupId>
+        <artifactId>h2</artifactId>
+        <version>${h2db.version}</version>
+        <scope>test</scope>
+      </dependency>
+
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-security</artifactId>
         <version>${spring.boot.version}</version>
       </dependency>
-      <dependency>
-        <groupId>org.springframework.security</groupId>
-        <artifactId>spring-security-test</artifactId>
-        <scope>test</scope>
-      </dependency>
+
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-validation</artifactId>

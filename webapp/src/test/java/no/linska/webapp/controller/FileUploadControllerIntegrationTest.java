@@ -44,7 +44,7 @@ public class FileUploadControllerIntegrationTest {
         given(this.storageService.loadAll())
                 .willReturn(Stream.of(Paths.get("first.txt"), Paths.get("second.txt")));
 
-        this.mvc.perform(get("/")).andExpect(status().isOk())
+        this.mvc.perform(get("/upload")).andExpect(status().isOk())
                 .andExpect(model().attribute("files",
                         Matchers.contains("http://localhost/files/first.txt",
                                 "http://localhost/files/second.txt")));
@@ -68,18 +68,6 @@ public class FileUploadControllerIntegrationTest {
                 .willThrow(StorageFileNotFoundException.class);
 
         this.mvc.perform(get("/files/test.txt")).andExpect(status().isNotFound());
-    }
-
-    @Test
-    public void lol() throws Exception {
-        String email = "user@nia.com";
-        String password = "benakiafagfa";
-        String request = String
-                .format("/process_register?email=%s&password=%s", email,password);
-
-        System.out.println(this.mvc);
-        this.mvc.perform(post(request))
-                .andExpect(status().isOk());
     }
 
 }
