@@ -52,10 +52,17 @@ public class RegistrationController {
             userService.register(user); }
         catch (DataIntegrityViolationException e) {
             modelAndView.setViewName("registration_form");
+            modelAndView.addObject("user",user);
             modelAndView.setStatus(HttpStatus.CONFLICT);
-            bindingResult.rejectValue("email",String.format(USER_ALREADY_EXISTS_ERR_MSG,user.getEmail()));
+            modelAndView
+                    .addObject(USER_ALREADY_EXISTS_KEY,
+                            String.format(USER_ALREADY_EXISTS_ERR_MSG,
+                                    user.getEmail()
+                            )
+                );
             return modelAndView;
         }
+
         modelAndView.setViewName("registration_complete");
         modelAndView.addObject(USER_REGISTERED_SUCCESS_KEY,
                 String.format(USER_REGISTERED_SUCCESS_MSG, user.getEmail()));
