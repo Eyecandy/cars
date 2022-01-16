@@ -19,7 +19,7 @@ import javax.validation.Valid;
 public class RegistrationController {
 
     @Autowired
-    UserServiceImpl registrationService;
+    UserServiceImpl userService;
 
     final String USER_ALREADY_EXISTS_KEY = "reg_conflict";
     final String USER_ALREADY_EXISTS_ERR_MSG = "Bruker er %s finnes allerede";
@@ -49,20 +49,13 @@ public class RegistrationController {
             return modelAndView;
         }
         try {
-            registrationService.register(user); }
+            userService.register(user); }
         catch (DataIntegrityViolationException e) {
             modelAndView.setViewName("registration_form");
-            modelAndView.addObject("user",user);
             modelAndView.setStatus(HttpStatus.CONFLICT);
-            modelAndView
-                    .addObject(USER_ALREADY_EXISTS_KEY,
-                            String.format(USER_ALREADY_EXISTS_ERR_MSG,
-                                    user.getEmail()
-                            )
-                );
+            bindingResult.rejectValue("email",String.format(USER_ALREADY_EXISTS_ERR_MSG,user.getEmail()));
             return modelAndView;
         }
-
         modelAndView.setViewName("registration_complete");
         modelAndView.addObject(USER_REGISTERED_SUCCESS_KEY,
                 String.format(USER_REGISTERED_SUCCESS_MSG, user.getEmail()));
