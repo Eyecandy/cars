@@ -37,7 +37,7 @@ public class User {
     private String email;
 
     @Column(name = "password")
-    @Size(min = 8,max = 30, message = "Passordet må være mellom 8 og 30 tegn")
+    @Size(min = 8, max = 100, message = "Passordet må minst ha 8 tegn")
     @NotBlank(message = "Passordet kan ikke være tomt")
     @NoWhiteSpaceAllowed(message = "Mellomrom kan ikke brukes i passord")
     private String password;
