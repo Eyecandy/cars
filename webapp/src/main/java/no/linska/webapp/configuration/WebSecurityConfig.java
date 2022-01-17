@@ -34,18 +34,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                     .authorizeRequests()
-                    .antMatchers("/", "/home","/register","/process_register").permitAll()
+                    .antMatchers("/", "/home","/register").permitAll()
                     .anyRequest().authenticated()
                 .and()
                     .formLogin()
                     .loginPage("/login")
                     .loginProcessingUrl("/process_login")
+                    .defaultSuccessUrl("/hello")
+                    .failureUrl("/login?error")
                     .usernameParameter("username")
                     .passwordParameter("password")
                     .permitAll()
+
                 .and()
                     .logout()
-                    .permitAll();
+                    .permitAll()
+                .and().exceptionHandling()
+                        .accessDeniedPage("/access-denied");
+
+
+
     }
 
 

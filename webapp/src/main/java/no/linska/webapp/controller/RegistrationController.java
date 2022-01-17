@@ -5,6 +5,7 @@ import no.linska.webapp.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,9 +31,12 @@ public class RegistrationController {
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
-        model.addAttribute("user", new User());
 
-        return "registration_form";
+        if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() == "anonymousUser" ) {
+            model.addAttribute("user", new User());
+            return "registration_form";
+        }
+        return "redirect:/hello";
     }
 
 
@@ -66,7 +70,6 @@ public class RegistrationController {
         modelAndView.setViewName("registration_complete");
         modelAndView.addObject(USER_REGISTERED_SUCCESS_KEY,
                 String.format(USER_REGISTERED_SUCCESS_MSG, user.getEmail()));
-        modelAndView.addObject("");
         return modelAndView;
     }
 

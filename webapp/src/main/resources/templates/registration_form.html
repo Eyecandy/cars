@@ -3,17 +3,12 @@
 <head>
     <meta charset="ISO-8859-1">
     <title>Sign Up - CodeJava</title>
-    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
-    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
 </head>
 <body>
 <div class="container text-center">
 
     <form th:action="@{/register}" th:object="${user}"
           method="post" style="max-width: 600px; margin: 0 auto;">
-
-
 
         <div class="m-3">
             <div class="container text-center">
@@ -50,10 +45,6 @@
                 <p th:each="err : ${#fields.errors('global')}" th:text="${err}" class="error" />
 
             </div>
-
-
-
-
                 <div>
                     <button type="submit" class="btn btn-primary">Registrer Bruker</button>
                 </div>

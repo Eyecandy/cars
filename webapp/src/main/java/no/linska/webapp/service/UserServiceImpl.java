@@ -16,8 +16,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void register(User user) {
         String encodedPassword = WebSecurityConfig.passwordEncoder().encode(user.getPassword());
-        System.out.println(encodedPassword);
-        System.out.println(encodedPassword.length());
         user.setPassword(encodedPassword);
         user.setMatchingPassword(encodedPassword);
         userRepository.save(user);
