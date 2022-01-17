@@ -11,7 +11,6 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @EnableConfigurationProperties(StorageProperties.class)
 @ComponentScan("no.linska.webapp")
-@EnableAutoConfiguration(exclude= ErrorMvcAutoConfiguration.class)
 public class WebappApplication {
 
 	public static void main(String[] args) {
