@@ -29,13 +29,7 @@
   <dependencyManagement>
     <dependencies>
 
-      <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
-      <dependency>
-        <groupId>com.h2database</groupId>
-        <artifactId>h2</artifactId>
-        <version>${h2db.version}</version>
-        <scope>test</scope>
-      </dependency>
+      
 
       <dependency>
         <groupId>org.springframework.boot</groupId>
@@ -194,7 +188,6 @@
       </plugins>
   </build>
   <modules>
-    <module>core</module>
   	<module>webapp</module>
 	<module>mailsender</module>
   </modules>
