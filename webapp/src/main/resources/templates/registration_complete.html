@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="ISO-8859-1">
+    <meta charset="UTF-8">
     <title>Registration Complete</title>
 </head>
 <body>
 <div class="container text-center">
-    <span th:utext="${reg_success}"></span>
+    <span th:utext="${reg_success}" ></span>
+    <p>Du trenger ikke verifisere e-post, bare å logge inn, vi blir mest sannsynlig å gå over til vipps for registrering og innlogging.</p>
+    <p><a th:href="@{/login}">Logg inn</a> </p>
 </div>
 </body>
 </html>

@@ -12,9 +12,10 @@
     You have been logged out.
 </div>
 <form th:action="@{/process_login}" method="post">
-    <div><label> User Name : <input type="text" name="username"/> </label></div>
-    <div><label> Password: <input type="password" name="password"/> </label></div>
+    <div><label> E-post : <input type="text" name="username"/> </label></div>
+    <div><label> Passord: <input type="password" name="password"/> </label></div>
     <div><input type="submit" value="Sign In"/></div>
 </form>
+<p><a th:href="@{/register}">Bruker registrering</a></p>
 </body>
 </html>
