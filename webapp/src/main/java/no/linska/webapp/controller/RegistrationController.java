@@ -30,14 +30,13 @@ public class RegistrationController {
     final String USER_REGISTERED_SUCCESS_MSG = "Bruker %s er registrert hos Linska, sjekk innboksen din for å verifisere kontoen";
 
 
-
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
+        model.addAttribute("user", new User());
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
         if (auth instanceof AnonymousAuthenticationToken) {
-            return "/register";
+            return "register";
         }
         return "redirect:/hello";
     }
@@ -50,7 +49,7 @@ public class RegistrationController {
         ModelAndView modelAndView = new ModelAndView();
 
         if (bindingResult.hasErrors()) {
-            modelAndView.setViewName("registration_form");
+            modelAndView.setViewName("register");
             modelAndView.addObject("user",user);
             modelAndView.setStatus(HttpStatus.BAD_REQUEST);
             return modelAndView;
@@ -58,7 +57,7 @@ public class RegistrationController {
         try {
             userService.register(user); }
         catch (DataIntegrityViolationException e) {
-            modelAndView.setViewName("registration_form");
+            modelAndView.setViewName("register");
             modelAndView.addObject("user",user);
             modelAndView.setStatus(HttpStatus.CONFLICT);
             modelAndView
