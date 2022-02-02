@@ -1,12 +1,24 @@
 package no.linska.webapp.exception;
 
-public class StorageException extends RuntimeException {
+import no.linska.webapp.exception.reason.ProcessingException;
+import no.linska.webapp.exception.reason.Reason;
 
-	public StorageException(String message) {
-		super(message);
+public class StorageException extends ProcessingException {
+
+
+	public StorageException(Reason reason) {
+		super(reason);
 	}
 
-	public StorageException(String message, Throwable cause) {
-		super(message, cause);
+	public StorageException(Reason reason, String message) {
+		super(reason, message);
+	}
+
+	public StorageException(Reason reason, String message, Throwable cause) {
+		super(reason, message, cause);
+	}
+
+	public StorageException(Reason reason, Throwable cause) {
+		super(reason, cause);
 	}
 }

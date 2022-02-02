@@ -7,10 +7,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import no.linska.webapp.exception.StorageException;
 import no.linska.webapp.exception.StorageFileNotFoundException;
+import no.linska.webapp.exception.reason.Reason;
 import no.linska.webapp.properties.StorageProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -24,6 +26,7 @@ public class FileSystemStorageService implements StorageService {
 
 	private final Path rootLocation;
 
+
 	@Autowired
 	public FileSystemStorageService(StorageProperties properties) {
 		this.rootLocation = Paths.get(properties.getUploadDir());
@@ -33,15 +36,15 @@ public class FileSystemStorageService implements StorageService {
 	public void store(MultipartFile file) {
 		try {
 			if (file.isEmpty()) {
-				throw new StorageException("Failed to store empty file.");
+				throw new StorageException(Reason.STORAGE_COULD_NOT_STORE_EMPTY_FILE);
 			}
 			Path destinationFile = this.rootLocation.resolve(
-					Paths.get(file.getOriginalFilename()))
+					Paths.get(Objects.requireNonNull(file.getOriginalFilename())))
 					.normalize().toAbsolutePath();
 			if (!destinationFile.getParent().equals(this.rootLocation.toAbsolutePath())) {
 				// This is a security check
-				throw new StorageException(
-						"Cannot store file outside current directory." + this.rootLocation.toAbsolutePath());
+				Reason reason = Reason.STORAGE_MUST_BE_CORRECT_DIRECTORY;
+				throw new StorageException(reason,reason.getMessage(this.rootLocation.toAbsolutePath()));
 			}
 			try (InputStream inputStream = file.getInputStream()) {
 				Files.copy(inputStream, destinationFile,
@@ -49,7 +52,7 @@ public class FileSystemStorageService implements StorageService {
 			}
 		}
 		catch (IOException e) {
-			throw new StorageException("Failed to store file.", e);
+			throw new StorageException(Reason.STORAGE_FILE_CAN_NOT_BE_STORED, e);
 		}
 	}
 
@@ -61,7 +64,7 @@ public class FileSystemStorageService implements StorageService {
 				.map(this.rootLocation::relativize);
 		}
 		catch (IOException e) {
-			throw new StorageException("Failed to read stored files", e);
+			throw new StorageException(Reason.STORAGE_FILES_CAN_NOT_BE_READ,e);
 		}
 
 	}
@@ -80,13 +83,15 @@ public class FileSystemStorageService implements StorageService {
 				return resource;
 			}
 			else {
+				Reason reason = Reason.STORAGE_COULD_NOT_READ_FILE;
 				throw new StorageFileNotFoundException(
-						"Could not read file: " + filename);
+						reason,reason.getMessage(filename));
 
 			}
 		}
 		catch (MalformedURLException e) {
-			throw new StorageFileNotFoundException("Could not read file: " + filename, e);
+			Reason reason = Reason.STORAGE_FILE_NOT_FOUND_EXCEPTION;
+			throw new StorageFileNotFoundException(reason, reason.getMessage(filename));
 		}
 	}
 
@@ -95,13 +100,14 @@ public class FileSystemStorageService implements StorageService {
 		FileSystemUtils.deleteRecursively(rootLocation.toFile());
 	}
 
+
 	@Override
 	public void init() {
 		try {
 			Files.createDirectories(rootLocation);
 		}
 		catch (IOException e) {
-			throw new StorageException("Could not initialize storage", e);
+			throw new StorageException(Reason.STORAGE_COULD_NOT_INIT);
 		}
 	}
 }
