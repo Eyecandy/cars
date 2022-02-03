@@ -1,6 +1,9 @@
 package no.linska.webapp.controller;
 
 import no.linska.webapp.repository.UserRepository;
+import org.junit.AfterClass;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +32,7 @@ public class RegistrationControllerIntegrationTest {
     String REQUEST = "/register?email=%s&password=%s&matchingPassword=%s";
 
 
-    @BeforeEach
+    @AfterEach
     void tearDown() {
         userRepository.deleteAll();
     }
