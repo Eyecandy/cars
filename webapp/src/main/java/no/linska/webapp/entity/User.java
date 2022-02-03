@@ -5,12 +5,7 @@ import no.linska.webapp.validator.email.ValidEmail;
 import no.linska.webapp.validator.password.MatchingPassword;
 import no.linska.webapp.validator.password.NoWhiteSpaceAllowed;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 

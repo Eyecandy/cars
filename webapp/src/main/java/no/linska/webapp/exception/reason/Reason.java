@@ -20,10 +20,10 @@ public enum Reason {
     STORAGE_FILE_NOT_FOUND_EXCEPTION("File %s not found", "s1"),
     STORAGE_MUST_BE_CORRECT_DIRECTORY("Could not save file in %s dir, allowed dir: %s", "s2"),
     STORAGE_COULD_NOT_READ_FILE("Could not read file %s", "s3"),
-    STORAGE_FILES_CAN_NOT_BE_READ("Failed to read files","s4"),
+    STORAGE_FILES_CAN_NOT_BE_READ("Failed to read files", "s4"),
 
-    STORAGE_FILE_CAN_NOT_BE_STORED("File %s can not be stored","s5"),
-    STORAGE_COULD_NOT_STORE_EMPTY_FILE("Could not store empty file","s6");
+    STORAGE_FILE_CAN_NOT_BE_STORED("File %s can not be stored", "s5"),
+    STORAGE_COULD_NOT_STORE_EMPTY_FILE("Could not store empty file", "s6");
 
 
     private final String message;

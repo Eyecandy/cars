@@ -1,11 +1,9 @@
 package no.linska.webapp.controller;
 
 
-
 import no.linska.webapp.entity.User;
 import no.linska.webapp.prebuilt.UserBuilder;
 import no.linska.webapp.repository.UserRepository;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 
-
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
-
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -40,7 +36,6 @@ public class LoginControllerTest {
     }
 
 
-
     @Test
     public void givenRegisteredUser_shouldLoginAndRedirect() throws Exception {
         // register user
@@ -49,7 +44,7 @@ public class LoginControllerTest {
         String validPassword = validUser.getPassword();
         String REQUEST = "/register?email=%s&password=%s&matchingPassword=%s";
         String request = String
-                .format(REQUEST, validEmail,validPassword,validPassword);
+                .format(REQUEST, validEmail, validPassword, validPassword);
 
         this.mvc.perform(post(request).with(csrf()));
 
@@ -70,7 +65,6 @@ public class LoginControllerTest {
         User validUser = UserBuilder.getValidUser();
         String validEmail = validUser.getEmail();
         String validPassword = validUser.getPassword();
-
 
 
         // login user

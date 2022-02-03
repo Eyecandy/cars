@@ -6,10 +6,10 @@ import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest
 @TestPropertySource(properties = {"MAIL_USERNAME=3025",
-		"MAIL_PASSWORD=localhost"})
+        "MAIL_PASSWORD=localhost"})
 class WebappApplicationTests {
 
-	void contextLoads() {
-	}
+    void contextLoads() {
+    }
 
 }

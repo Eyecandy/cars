@@ -1,15 +1,5 @@
 package no.linska.webapp.service;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.Objects;
-import java.util.stream.Stream;
-
 import no.linska.webapp.exception.StorageException;
 import no.linska.webapp.exception.StorageFileNotFoundException;
 import no.linska.webapp.exception.reason.Reason;
@@ -20,6 +10,16 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @Service("fileSystemStorageService")
 public class FileSystemStorageService implements StorageService {

@@ -10,8 +10,6 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.Properties;
 
-import static java.lang.String.format;
-
 
 @Configuration
 public class NoWhiteSpaceValidator implements ConstraintValidator<NoWhiteSpaceAllowed, String> {
@@ -25,19 +23,15 @@ public class NoWhiteSpaceValidator implements ConstraintValidator<NoWhiteSpaceAl
     @Override
     public void initialize(NoWhiteSpaceAllowed arg0) {
 
-       validator = new PasswordValidator(
-               new WhitespaceRule()
+        validator = new PasswordValidator(
+                new WhitespaceRule()
         );
     }
-
 
 
     @Override
     public boolean isValid(String password, ConstraintValidatorContext context) {
         RuleResult result = validator.validate(new PasswordData(password));
-        if (result.isValid()) {
-            return true;
-        }
-        return false;
+        return result.isValid();
     }
 }

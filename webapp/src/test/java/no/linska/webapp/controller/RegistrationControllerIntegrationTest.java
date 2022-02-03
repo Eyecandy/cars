@@ -1,21 +1,17 @@
 package no.linska.webapp.controller;
 
 import no.linska.webapp.repository.UserRepository;
-import org.junit.AfterClass;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
-
-
 
 
 @AutoConfigureMockMvc
@@ -46,11 +42,11 @@ public class RegistrationControllerIntegrationTest {
 
 
         String request = String
-                .format(REQUEST, validEmail,validPassword,nonMatchingPassword);
+                .format(REQUEST, validEmail, validPassword, nonMatchingPassword);
 
         this.mvc.perform(post(request))
                 .andExpect(status().isForbidden());
-     }
+    }
 
     @Test
     void shouldRegisterUser() throws Exception {
@@ -58,7 +54,7 @@ public class RegistrationControllerIntegrationTest {
         String validPassword = "between_8_and_30_chars";
 
         String request = String
-                .format(REQUEST, validEmail,validPassword,validPassword);
+                .format(REQUEST, validEmail, validPassword, validPassword);
 
         this.mvc.perform(post(request).with(csrf()))
                 .andExpect(status().isOk());
@@ -69,7 +65,7 @@ public class RegistrationControllerIntegrationTest {
         String validEmail = "user@server.com";
         String validPassword = "2short";
         String request = String
-                .format(REQUEST, validEmail,validPassword,validPassword);
+                .format(REQUEST, validEmail, validPassword, validPassword);
 
         this.mvc.perform(post(request).with(csrf()))
                 .andExpect(status().isBadRequest());
@@ -81,7 +77,7 @@ public class RegistrationControllerIntegrationTest {
         String invalidEmail = "user@server";
         String validPassword = "between_8_and_30_chars";
         String request = String
-                .format("/register?email=%s&password=%s", invalidEmail,validPassword,validPassword);
+                .format("/register?email=%s&password=%s", invalidEmail, validPassword, validPassword);
 
         this.mvc.perform(post(request).with(csrf()))
                 .andExpect(status().isBadRequest());
@@ -92,7 +88,7 @@ public class RegistrationControllerIntegrationTest {
         var validEmail = "user@server.com";
         var validPassword = "between_8_and_30_chars";
         var request = String
-                .format(REQUEST, validEmail,validPassword,validPassword);
+                .format(REQUEST, validEmail, validPassword, validPassword);
 
         this.mvc.perform(post(request).with(csrf()))
                 .andExpect(status().isOk());
@@ -110,7 +106,7 @@ public class RegistrationControllerIntegrationTest {
         String nonMatchingPassword = "NOT_A_MATCH";
 
         String request = String
-                .format(REQUEST, validEmail,validPassword,nonMatchingPassword);
+                .format(REQUEST, validEmail, validPassword, nonMatchingPassword);
 
         this.mvc.perform(post(request).with(csrf()))
                 .andExpect(status().isBadRequest());

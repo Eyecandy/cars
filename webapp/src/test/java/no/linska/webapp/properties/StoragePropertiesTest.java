@@ -21,10 +21,9 @@ public class StoragePropertiesTest {
 
     @Test
     public void givenUserDefinedPOJO_whenBindingPropertiesFile_thenAllFieldsAreSet() {
-        Assert.assertEquals("/test/path/",storageProperties.getUploadDir());
+        Assert.assertEquals("/test/path/", storageProperties.getUploadDir());
 
     }
-
 
 
 }
