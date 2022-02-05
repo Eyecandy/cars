@@ -1,6 +1,10 @@
 package no.linska.webapp.controller;
 
 import no.linska.webapp.entity.User;
+import no.linska.webapp.exception.StorageException;
+import no.linska.webapp.properties.StorageProperties;
+import no.linska.webapp.service.FileSystemStorageService;
+import no.linska.webapp.service.StorageService;
 import no.linska.webapp.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.nio.file.Files;
 
 
 @Controller
@@ -27,6 +32,9 @@ public class RegistrationController {
     final String USER_REGISTERED_SUCCESS_MSG = "Bruker %s er registrert hos Linska, sjekk innboksen din for å verifisere kontoen";
     @Autowired
     UserServiceImpl userService;
+
+    @Autowired
+    StorageService storageService;
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
@@ -45,7 +53,6 @@ public class RegistrationController {
                                       BindingResult bindingResult) {
 
         ModelAndView modelAndView = new ModelAndView();
-
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName("register");
             modelAndView.addObject("user", user);
@@ -66,7 +73,7 @@ public class RegistrationController {
                     );
             return modelAndView;
         }
-
+        storageService.createUserDir(user.getId().toString());
         modelAndView.setViewName("registration_complete");
         modelAndView.addObject(USER_REGISTERED_SUCCESS_KEY,
                 String.format(USER_REGISTERED_SUCCESS_MSG, user.getEmail()));

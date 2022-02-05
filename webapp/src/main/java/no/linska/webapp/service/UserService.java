@@ -6,4 +6,6 @@ public interface UserService {
 
     void register(User user);
 
+    User findByEmail(String email);
+
 }

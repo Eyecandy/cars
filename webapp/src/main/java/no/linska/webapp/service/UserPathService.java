@@ -1,2 +1,5 @@
-package no.linska.webapp.service;public class UserPathService {
+package no.linska.webapp.service;
+
+public class UserPathService {
+
 }

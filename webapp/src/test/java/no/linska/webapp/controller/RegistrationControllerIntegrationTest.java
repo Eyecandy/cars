@@ -1,15 +1,26 @@
 package no.linska.webapp.controller;
 
+import no.linska.webapp.properties.StorageProperties;
 import no.linska.webapp.repository.UserRepository;
+import no.linska.webapp.service.UserService;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.junit.AfterClass;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.event.annotation.AfterTestExecution;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.io.File;
+import java.io.IOException;
+
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -17,7 +28,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @SpringBootTest
 @ActiveProfiles("test")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class RegistrationControllerIntegrationTest {
+
+    //TODO: test user folder creation on registration
 
     @Autowired
     MockMvc mvc;
@@ -27,15 +41,23 @@ public class RegistrationControllerIntegrationTest {
 
     String REQUEST = "/register?email=%s&password=%s&matchingPassword=%s";
 
+    @Autowired
+    StorageProperties storageProperties;
 
     @AfterEach
     void tearDown() {
         userRepository.deleteAll();
     }
 
+    @AfterAll
+    void removeTestFolders() throws IOException {
+        FileUtils.deleteDirectory(new File(storageProperties.getUploadDir()));
+    }
+
 
     @Test
     void csfrIsEnabled_onRegistration() throws Exception {
+        System.out.println(userRepository.findAll());
         String validEmail = "user@server.com";
         String validPassword = "between_8_and_30_chars";
         String nonMatchingPassword = "between_8_and_30_chars";

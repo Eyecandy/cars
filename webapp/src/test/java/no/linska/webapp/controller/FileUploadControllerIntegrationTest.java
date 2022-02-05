@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.nio.file.Paths;
@@ -21,12 +22,16 @@ import static org.mockito.BDDMockito.then;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @AutoConfigureMockMvc
 @SpringBootTest
+@ActiveProfiles("test")
 public class FileUploadControllerIntegrationTest {
+
+
 
     @Autowired
     private MockMvc mvc;
@@ -41,6 +46,7 @@ public class FileUploadControllerIntegrationTest {
                 .willReturn(Stream.of(Paths.get("first.txt"), Paths.get("second.txt")));
 
         this.mvc.perform(get("/upload")).andExpect(status().isOk())
+                .andDo(print())
                 .andExpect(model().attribute("files",
                         Matchers.contains("http://localhost/upload/files/first.txt",
                                 "http://localhost/upload/files/second.txt")));

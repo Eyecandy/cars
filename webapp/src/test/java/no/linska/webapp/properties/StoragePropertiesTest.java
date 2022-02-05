@@ -15,15 +15,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @EnableConfigurationProperties(value = StorageProperties.class)
 @TestPropertySource("classpath:application-test.properties")
 public class StoragePropertiesTest {
+    //TODO test file upload
 
-    @Autowired
-    StorageProperties storageProperties;
-
-    @Test
-    public void givenUserDefinedPOJO_whenBindingPropertiesFile_thenAllFieldsAreSet() {
-        Assert.assertEquals("/test/path/", storageProperties.getUploadDir());
-
-    }
 
 
 }
