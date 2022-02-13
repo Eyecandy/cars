@@ -7,6 +7,8 @@ import no.linska.webapp.validator.password.NoWhiteSpaceAllowed;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @MatchingPassword(message = "Passordene må matches")
@@ -16,12 +18,16 @@ public class User {
 
     @Id
     @GeneratedValue(strategy=GenerationType.SEQUENCE)
+    @Column(name="user_id")
     private Long id;
 
     @Column(name = "enabled")
     private boolean enabled = true;
 
-    private String role = "customer";
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    @NotNull
+    private UserRole userRole;
 
     @Column(name = "firstname")
     private String firstName;

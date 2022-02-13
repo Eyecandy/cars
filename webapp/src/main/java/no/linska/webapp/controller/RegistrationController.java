@@ -1,9 +1,7 @@
 package no.linska.webapp.controller;
 
 import no.linska.webapp.entity.User;
-import no.linska.webapp.exception.StorageException;
-import no.linska.webapp.properties.StorageProperties;
-import no.linska.webapp.service.FileSystemStorageService;
+import no.linska.webapp.entity.UserRole;
 import no.linska.webapp.service.StorageService;
 import no.linska.webapp.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.nio.file.Files;
 
 
 @Controller
@@ -59,9 +56,8 @@ public class RegistrationController {
             modelAndView.setStatus(HttpStatus.BAD_REQUEST);
             return modelAndView;
         }
-        try {
-            userService.register(user);
-        } catch (DataIntegrityViolationException e) {
+
+        else if (existing(user)) {
             modelAndView.setViewName("register");
             modelAndView.addObject("user", user);
             modelAndView.setStatus(HttpStatus.CONFLICT);
@@ -73,6 +69,8 @@ public class RegistrationController {
                     );
             return modelAndView;
         }
+
+        userService.register(user);
         storageService.createUserDir(user.getId().toString());
         modelAndView.setViewName("registration_complete");
         modelAndView.addObject(USER_REGISTERED_SUCCESS_KEY,
@@ -80,4 +78,7 @@ public class RegistrationController {
         return modelAndView;
     }
 
+    private boolean existing(User user) {
+        return userService.findByEmail(user.getEmail()) != null;
+    }
 }
