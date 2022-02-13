@@ -5,7 +5,6 @@ import no.linska.webapp.entity.UserRole;
 import no.linska.webapp.service.StorageService;
 import no.linska.webapp.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.persistence.Id;
 import javax.validation.Valid;
 
 
@@ -35,7 +35,11 @@ public class RegistrationController {
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
-        model.addAttribute("user", new User());
+        User user = new User();
+        UserRole userRole = new UserRole();
+        userRole.setId(1);
+        user.setUserRole(userRole);
+        model.addAttribute("user", user);
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth instanceof AnonymousAuthenticationToken) {
