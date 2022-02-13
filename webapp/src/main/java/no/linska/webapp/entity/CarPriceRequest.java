@@ -6,9 +6,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
-@Entity(name = "user_order")
+@Entity(name = "car_price_request")
 @Data
-public class UserOrder {
+public class CarPriceRequest {
 
     @Id
     private Long id;
