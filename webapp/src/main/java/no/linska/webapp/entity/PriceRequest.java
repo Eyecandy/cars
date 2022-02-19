@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Entity(name = "car_price_request")
 @Data
-public class priceRequest {
+public class PriceRequest {
 
     @Id
     private Long id;
