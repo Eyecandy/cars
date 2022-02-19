@@ -8,13 +8,13 @@ import java.util.Date;
 
 @Entity(name = "car_price_request")
 @Data
-public class CarPriceRequest {
+public class priceRequest {
 
     @Id
     private Long id;
 
     @NotBlank
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
