@@ -22,6 +22,7 @@ import java.io.IOException;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -39,7 +40,7 @@ public class RegistrationControllerIntegrationTest {
     @Autowired
     UserRepository userRepository;
 
-    String REQUEST = "/register?email=%s&password=%s&matchingPassword=%s";
+    String REQUEST = "/register?email=%s&password=%s&matchingPassword=%s&userRole.id=1";
 
     @Autowired
     StorageProperties storageProperties;
@@ -79,6 +80,7 @@ public class RegistrationControllerIntegrationTest {
                 .format(REQUEST, validEmail, validPassword, validPassword);
 
         this.mvc.perform(post(request).with(csrf()))
+                .andDo(print())
                 .andExpect(status().isOk());
     }
 

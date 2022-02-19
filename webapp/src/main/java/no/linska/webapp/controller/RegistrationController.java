@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.persistence.Id;
 import javax.validation.Valid;
 
 
@@ -35,12 +34,7 @@ public class RegistrationController {
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
-        User user = new User();
-        UserRole userRole = new UserRole();
-        userRole.setId(1);
-        user.setUserRole(userRole);
-        model.addAttribute("user", user);
-
+        selectDefaultUserRoleRadioButton(model);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth instanceof AnonymousAuthenticationToken) {
             return "register";
@@ -84,5 +78,13 @@ public class RegistrationController {
 
     private boolean existing(User user) {
         return userService.findByEmail(user.getEmail()) != null;
+    }
+
+    private void selectDefaultUserRoleRadioButton(Model model) {
+        User user = new User();
+        UserRole userRole = new UserRole();
+        userRole.setId(1);
+        user.setUserRole(userRole);
+        model.addAttribute("user", user);
     }
 }

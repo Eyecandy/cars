@@ -44,7 +44,7 @@ public class LoginControllerTest {
         User validUser = UserBuilder.getValidUser();
         String validEmail = validUser.getEmail();
         String validPassword = validUser.getPassword();
-        String REQUEST = "/register?email=%s&password=%s&matchingPassword=%s";
+        String REQUEST = "/register?email=%s&password=%s&matchingPassword=%s&userRole.id=1";
         String request = String
                 .format(REQUEST, validEmail, validPassword, validPassword);
 

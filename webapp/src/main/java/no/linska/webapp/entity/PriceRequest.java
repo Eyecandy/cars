@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity(name = "car_price_request")
@@ -13,20 +14,19 @@ public class PriceRequest {
     @Id
     private Long id;
 
-    @NotBlank
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @NotBlank
+    @NotNull
     @Column
     private Integer carBrandId;
 
-    @NotBlank
+    @NotNull
     @Column
     private Integer countyId;
 
-    @NotBlank
+    @NotNull
     @Column
     private Integer configMethodId;
 
@@ -34,7 +34,6 @@ public class PriceRequest {
     @Column
     private String configuration;
 
-    @NotBlank
     @Column
     private Date deadline;
 }
