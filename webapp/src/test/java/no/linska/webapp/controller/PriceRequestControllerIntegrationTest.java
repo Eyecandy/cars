@@ -1,25 +1,27 @@
 package no.linska.webapp.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import no.linska.webapp.entity.PriceRequest;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.junit.jupiter.api.Test;
+import no.linska.webapp.entity.User;
+import no.linska.webapp.entity.UserRole;
+import no.linska.webapp.repository.PriceRequestRepository;
+import no.linska.webapp.repository.UserRepository;
+import no.linska.webapp.service.UserRoleService;
+import no.linska.webapp.service.UserService;
+import org.junit.After;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.event.annotation.AfterTestExecution;
+import org.springframework.test.context.event.annotation.BeforeTestClass;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-
-import javax.json.JsonObject;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -29,12 +31,47 @@ public class PriceRequestControllerIntegrationTest {
     @Autowired
     private MockMvc mvc;
 
+    @Autowired
+    UserRoleService userRoleService;
+
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    PriceRequestRepository priceRequestRepository;
+
+
+
+    private String testUserName = "spring@mail.com";
+
+    @BeforeEach
+    void tearDown() {
+        userRepository.deleteAll();
+    }
+
+
+
+
+
+
 
     @Test
     @WithMockUser(value = "spring@mail.com")
-    public void createMockRequest() throws Exception {
+    public void shouldCreatePriceRequest() throws Exception {
         //TODO: CREATE spring@gmail.com user in DB before test
         //ADD USER IN POST PRICE REQUEST AND SAVE PRICEREQUEST
+
+        User user = new User();
+        UserRole userRole = new UserRole();
+        userRole.setId(1);
+        UserRole userRole1 = userRoleService.findRoleById(userRole);
+        user.setUserRole(userRole1);
+        user.setEmail(testUserName);
+        user.setPassword("mypassword");
+        userService.register(user);
 
        MockHttpServletRequestBuilder request = post("/pricerequest")
                 .param("carBrandId","1")
@@ -48,7 +85,11 @@ public class PriceRequestControllerIntegrationTest {
 
 
         this.mvc.perform(request)
-                .andDo(print());
+                .andDo(print())
+                .andExpect(status().isOk());
+
+
+
 
 
     }
