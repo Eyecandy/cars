@@ -1,12 +1,15 @@
 package no.linska.webapp.controller;
 
+import no.linska.webapp.entity.PriceRequest;
 import no.linska.webapp.entity.User;
 import no.linska.webapp.entity.UserRole;
 import no.linska.webapp.repository.PriceRequestRepository;
 import no.linska.webapp.repository.UserRepository;
+import no.linska.webapp.service.PriceRequestService;
 import no.linska.webapp.service.UserRoleService;
 import no.linska.webapp.service.UserService;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -18,7 +21,12 @@ import org.springframework.test.context.event.annotation.BeforeTestClass;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
+import javax.validation.constraints.AssertTrue;
+
+import java.util.Optional;
+
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -41,7 +49,7 @@ public class PriceRequestControllerIntegrationTest {
     UserRepository userRepository;
 
     @Autowired
-    PriceRequestRepository priceRequestRepository;
+    PriceRequestService priceRequestService;
 
 
 
@@ -88,8 +96,38 @@ public class PriceRequestControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk());
 
+    }
+
+    @Test
+    @WithMockUser(value = "spring@mail.com")
+    public void shouldGetPriceList() throws Exception {
+        User user = new User();
+        UserRole userRole = new UserRole();
+        userRole.setId(1);
+        UserRole userRole1 = userRoleService.findRoleById(userRole);
+        user.setUserRole(userRole1);
+        user.setEmail(testUserName);
+        user.setPassword("mypassword");
+        userService.register(user);
+
+        MockHttpServletRequestBuilder createPriceRequest = post("/pricerequest")
+                .param("carBrandId","1")
+                .param("countyId","1")
+                .param("user.id","1")
+                .param("configMethodId", "1")
+                .param("config", "1")
+                .param("configuration","1")
+
+                .with(csrf());
 
 
+        this.mvc.perform(createPriceRequest);
+
+        MockHttpServletRequestBuilder getListRequest = get("/list_price_request");
+
+        this.mvc.perform(getListRequest.with(csrf()))
+                .andDo(print())
+        ;
 
 
     }

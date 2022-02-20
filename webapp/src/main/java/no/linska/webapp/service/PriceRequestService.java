@@ -10,6 +10,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PriceRequestService {
 
@@ -18,11 +20,21 @@ public class PriceRequestService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    UserServiceImpl userService;
+
     public void save(PriceRequest priceRequest) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByEmail(auth.getName());
         priceRequest.setUser(user);
         priceRequestRepository.save(priceRequest);
 
+    }
+
+    public List<PriceRequest> getUserPriceRequest() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findByEmail(auth.getName());
+        System.out.println(user);
+        return user.getPriceRequestList();
     }
 }

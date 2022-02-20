@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @MatchingPassword(message = "Passordene må matches")
 @Entity(name = "user_account")
@@ -48,6 +49,9 @@ public class User {
     @Transient
     private String matchingPassword;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    List<PriceRequest> priceRequestList;
+
 
     @Override
     public String toString() {
@@ -55,4 +59,7 @@ public class User {
                 "Customer[id=%d, firstName='%s', lastName='%s',email='%s']",
                 id, firstName, lastName,email);
     }
+
+
+
 }

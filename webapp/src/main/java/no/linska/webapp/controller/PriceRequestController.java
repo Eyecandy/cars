@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.enterprise.inject.Model;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.validation.Valid;
@@ -43,6 +44,17 @@ public class PriceRequestController {
 
 
     }
+
+    @GetMapping("/list_price_request")
+    public String getPriceRequests() {
+        ModelAndView modelAndView = new ModelAndView();
+
+        modelAndView.addObject("priceRequests",priceRequestService.getUserPriceRequest());
+
+        return "/list_price_request";
+    }
+
+
 
 
 
