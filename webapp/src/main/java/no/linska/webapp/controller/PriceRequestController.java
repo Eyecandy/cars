@@ -12,10 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.enterprise.inject.Model;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.validation.Valid;
@@ -42,7 +39,7 @@ public class PriceRequestController {
             return modelAndView;
         }
         priceRequestService.save(priceRequest);
-        return new ModelAndView("/pricerequest");
+        return new ModelAndView("/list_price_request");
 
 
     }

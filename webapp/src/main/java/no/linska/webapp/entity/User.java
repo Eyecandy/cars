@@ -9,12 +9,13 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.List;
 
 @MatchingPassword(message = "Passordene må matches")
 @Entity(name = "user_account")
 @Data
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy=GenerationType.SEQUENCE)
@@ -51,7 +52,6 @@ public class User {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     List<PriceRequest> priceRequestList;
-
 
     @Override
     public String toString() {

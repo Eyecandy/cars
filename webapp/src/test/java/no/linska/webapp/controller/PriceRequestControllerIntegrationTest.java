@@ -1,31 +1,19 @@
 package no.linska.webapp.controller;
 
-import no.linska.webapp.entity.PriceRequest;
 import no.linska.webapp.entity.User;
 import no.linska.webapp.entity.UserRole;
-import no.linska.webapp.repository.PriceRequestRepository;
 import no.linska.webapp.repository.UserRepository;
 import no.linska.webapp.service.PriceRequestService;
 import no.linska.webapp.service.UserRoleService;
 import no.linska.webapp.service.UserService;
-import org.junit.After;
-import org.junit.Assert;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.event.annotation.AfterTestExecution;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-
-import javax.validation.constraints.AssertTrue;
-
-import java.util.Optional;
-
-import static org.hamcrest.Matchers.containsString;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
