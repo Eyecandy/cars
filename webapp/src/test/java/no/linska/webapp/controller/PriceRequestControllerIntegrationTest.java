@@ -25,6 +25,7 @@ import javax.validation.constraints.AssertTrue;
 
 import java.util.Optional;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -130,5 +131,35 @@ public class PriceRequestControllerIntegrationTest {
         ;
 
 
+    }
+
+
+    @Test
+    @WithMockUser(value = "spring@mail.com")
+    public void shouldThrowErrorMissingCarBrandId() throws Exception {
+
+
+        User user = new User();
+        UserRole userRole = new UserRole();
+        userRole.setId(1);
+        UserRole userRole1 = userRoleService.findRoleById(userRole);
+        user.setUserRole(userRole1);
+        user.setEmail(testUserName);
+        user.setPassword("mypassword");
+        userService.register(user);
+
+        MockHttpServletRequestBuilder request = post("/pricerequest")
+                .param("countyId","1")
+                .param("user.id","1")
+                .param("configMethodId", "1")
+                .param("config", "1")
+                .param("configuration","1")
+
+                .with(csrf());
+
+
+        this.mvc.perform(request)
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 }

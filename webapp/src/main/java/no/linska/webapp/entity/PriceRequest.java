@@ -5,7 +5,6 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -21,19 +20,19 @@ public class PriceRequest {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-    @NotNull
+    @NotNull(message = "Må velge bilmerke")
     @Column
     private Integer carBrandId;
 
-    @NotNull
+    @NotNull(message = "Må velge fylke")
     @Column
     private Integer countyId;
 
-    @NotNull
+    @NotNull(message = "Må velge konfigmetode")
     @Column
     private Integer configMethodId;
 
-    @NotBlank
+    @NotNull(message = "Konfigurasjon kan ikke være tom")
     @Column
     private String configuration;
 

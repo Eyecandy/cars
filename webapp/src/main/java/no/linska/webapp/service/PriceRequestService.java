@@ -34,7 +34,6 @@ public class PriceRequestService {
     public List<PriceRequest> getUserPriceRequest() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findByEmail(auth.getName());
-        System.out.println(user);
         return user.getPriceRequestList();
     }
 }

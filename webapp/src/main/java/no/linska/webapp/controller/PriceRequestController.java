@@ -34,10 +34,12 @@ public class PriceRequestController {
 
     @PostMapping("/pricerequest")
     public ModelAndView createPriceRequest(@Valid PriceRequest priceRequest, BindingResult bindingResult) {
-
+        ModelAndView modelAndView = new ModelAndView();
         if (bindingResult.hasErrors()) {
-            System.out.println(bindingResult.getAllErrors().toString());
-
+            modelAndView.setViewName("pricerequest");
+            modelAndView.addObject("priceRequest", priceRequest);
+            modelAndView.setStatus(HttpStatus.BAD_REQUEST);
+            return modelAndView;
         }
         priceRequestService.save(priceRequest);
         return new ModelAndView("/pricerequest");
