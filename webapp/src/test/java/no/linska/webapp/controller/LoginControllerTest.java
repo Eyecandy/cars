@@ -41,7 +41,7 @@ public class LoginControllerTest {
     @Test
     public void givenRegisteredUser_shouldLoginAndRedirect() throws Exception {
         // register user
-        User validUser = UserBuilder.getValidUser();
+        User validUser = UserBuilder.createValidUser();
         String validEmail = validUser.getEmail();
         String validPassword = validUser.getPassword();
         String REQUEST = "/register?email=%s&password=%s&matchingPassword=%s&userRole.id=1";
@@ -64,7 +64,7 @@ public class LoginControllerTest {
     @Test
     public void givenUserNotRegistered_shouldFailToLogin() throws Exception {
         // register user
-        User validUser = UserBuilder.getValidUser();
+        User validUser = UserBuilder.createValidUser();
         String validEmail = validUser.getEmail();
         String validPassword = validUser.getPassword();
 

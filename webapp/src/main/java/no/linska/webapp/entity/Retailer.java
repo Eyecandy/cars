@@ -32,7 +32,6 @@ public class Retailer implements Serializable {
                             nullable = false, updatable = false)})
     private Set<CarBrand> carBrands;
 
-
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "retailer")
     private List<Seller> sellers;
 

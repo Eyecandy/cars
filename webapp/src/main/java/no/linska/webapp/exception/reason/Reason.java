@@ -23,7 +23,11 @@ public enum Reason {
     STORAGE_FILES_CAN_NOT_BE_READ("Failed to read files", "s4"),
 
     STORAGE_FILE_CAN_NOT_BE_STORED("File %s can not be stored", "s5"),
-    STORAGE_COULD_NOT_STORE_EMPTY_FILE("Could not store empty file", "s6");
+    STORAGE_COULD_NOT_STORE_EMPTY_FILE("Could not store empty file", "s6"),
+
+    CAR_BRAND_IS_EMPTY("Carbrand with id %s is Empty", "s7"),
+    NO_RETAILERS_IN_CAR_BRAND("No retailers for selected car brand %s","s8"),
+    NO_SELLERS_IN_RETAILERS("No sellers where found from retailers %s", "s9");
 
 
     private final String message;

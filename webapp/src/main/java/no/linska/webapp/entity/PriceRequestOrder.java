@@ -15,8 +15,9 @@ public class PriceRequestOrder {
 
 
     @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "seller_id")
+    private Seller seller;
+
 
     @ManyToOne
     @JoinColumn(name = "price_request_id")

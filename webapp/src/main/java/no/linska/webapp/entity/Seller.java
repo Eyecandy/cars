@@ -11,7 +11,8 @@ public class Seller {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "seller_id")
+    private Integer id;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
@@ -21,6 +22,6 @@ public class Seller {
     @JoinColumn(name = "org_number", nullable = false)
     private Retailer retailer;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "seller")
     private List<PriceRequestOrder> priceRequestOrders;
 }

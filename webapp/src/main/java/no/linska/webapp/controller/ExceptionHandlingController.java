@@ -1,5 +1,7 @@
 package no.linska.webapp.controller;
 
+import no.linska.webapp.exception.DataException;
+import no.linska.webapp.exception.reason.ProcessingException;
 import org.hibernate.TransientPropertyValueException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.*;
@@ -33,6 +36,19 @@ public class ExceptionHandlingController {
         System.out.println("INTERNAL SERVER ERROR 2");
         LOGGER.log(Level.SEVERE,req.toString());
         LOGGER.log(Level.SEVERE,ex.toString());
+        System.out.println(ex.getMessage());
+        System.out.println(ex.getCause());
+
+        return "/error";
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(DataException.class)
+    public String handleProcessingException(HttpServletRequest req, DataException ex) {
+        LOGGER.log(Level.SEVERE, "ERROR CODE: {0} ",ex.getReason().getCode());
+        LOGGER.log(Level.SEVERE, "REASON: {0} " ,ex.getReason());
+        LOGGER.log(Level.SEVERE, "MESSAGE: {0}", ex.getMessage());
+
 
         return "/error";
     }
@@ -40,7 +56,10 @@ public class ExceptionHandlingController {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(DataIntegrityViolationException.class)
     public String handleDataIntegrityViolationException(HttpServletRequest req, Exception ex) {
-        LOGGER.log(Level.SEVERE,req.toString());
+        LOGGER.log(Level.SEVERE,req.toString()
+
+
+        );
         LOGGER.log(Level.SEVERE,ex.toString());
         return "/error";
     }

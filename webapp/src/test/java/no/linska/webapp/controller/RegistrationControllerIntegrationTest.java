@@ -1,7 +1,9 @@
 package no.linska.webapp.controller;
 
+import no.linska.webapp.entity.UserRole;
 import no.linska.webapp.properties.StorageProperties;
 import no.linska.webapp.repository.UserRepository;
+import no.linska.webapp.repository.UserRoleRepository;
 import no.linska.webapp.service.UserService;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.junit.AfterClass;
@@ -45,6 +47,9 @@ public class RegistrationControllerIntegrationTest {
     @Autowired
     StorageProperties storageProperties;
 
+    @Autowired
+    UserRoleRepository userRoleRepository;
+
     @AfterEach
     void tearDown() {
         userRepository.deleteAll();
@@ -73,6 +78,12 @@ public class RegistrationControllerIntegrationTest {
 
     @Test
     void shouldRegisterUser() throws Exception {
+
+        UserRole customerRole = new UserRole();
+        customerRole.setId(1);
+        customerRole.setType("Customer");
+        userRoleRepository.save(customerRole);
+
         String validEmail = "user@server.com";
         String validPassword = "between_8_and_30_chars";
 
