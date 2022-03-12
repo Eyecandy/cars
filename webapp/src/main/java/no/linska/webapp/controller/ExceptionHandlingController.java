@@ -1,21 +1,16 @@
 package no.linska.webapp.controller;
 
 import no.linska.webapp.exception.DataException;
-import no.linska.webapp.exception.reason.ProcessingException;
 import org.hibernate.TransientPropertyValueException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.logging.*;
 
 
 @ControllerAdvice
