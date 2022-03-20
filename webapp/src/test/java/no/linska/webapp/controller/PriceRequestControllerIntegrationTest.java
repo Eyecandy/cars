@@ -22,6 +22,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -54,9 +55,6 @@ public class PriceRequestControllerIntegrationTest {
 
     @Autowired
     PriceRequestOrderRepository priceRequestOrderRepository;
-
-
-
 
 
 
@@ -181,9 +179,16 @@ public class PriceRequestControllerIntegrationTest {
 
         MockHttpServletRequestBuilder getListRequest = get("/list_price_request");
 
+
+
         this.mvc.perform(getListRequest.with(csrf()))
                 .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("priceRequests"))
+
         ;
+
+
     }
 
 

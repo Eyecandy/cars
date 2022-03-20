@@ -9,7 +9,9 @@ import java.util.List;
 
 public interface PriceRequestOrderRepository  extends CrudRepository<PriceRequestOrder, Long> {
 
-    @Query(value = "SELECT * FROM price_request_order WHERE user_id = ?", nativeQuery = true)
+    @Query(value = "select * from price_request_order\n" +
+            "where seller_id = (select seller_id from seller\n" +
+            "where user_id = ?)", nativeQuery = true)
     List<PriceRequestOrder> findByUserId(Long id);
 
 }

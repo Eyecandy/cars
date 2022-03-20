@@ -10,7 +10,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
+
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 public class PriceRequestController {
@@ -23,6 +25,7 @@ public class PriceRequestController {
 
     @GetMapping("/pricerequest")
     public String priceRequest() {
+
         return "/pricerequest";
     }
 
@@ -49,12 +52,15 @@ public class PriceRequestController {
     }
 
     @GetMapping("/list_price_request")
-    public String getPriceRequests() {
+    public ModelAndView getPriceRequests() {
+
         ModelAndView modelAndView = new ModelAndView();
+
+        List<PriceRequest> priceRequests = priceRequestService.getUserPriceRequest();
 
         modelAndView.addObject("priceRequests",priceRequestService.getUserPriceRequest());
 
-        return "/list_price_request";
+        return modelAndView;
     }
 
 

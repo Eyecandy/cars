@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,6 +35,6 @@ public class PriceRequestService {
     public List<PriceRequest> getUserPriceRequest() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findByEmail(auth.getName());
-        return user.getPriceRequestList();
+        return new ArrayList<>(user.getPriceRequestList());
     }
 }

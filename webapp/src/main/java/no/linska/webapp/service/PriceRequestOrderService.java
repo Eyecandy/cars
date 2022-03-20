@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface PriceRequestOrderService {
 
-    List<PriceRequestOrder> getOrdersForUser();
+    List<PriceRequestOrder> getOrdersBelongingToSellerUser();
     void createPriceRequestOrdersAsync(PriceRequest priceRequest) throws InterruptedException;
 }

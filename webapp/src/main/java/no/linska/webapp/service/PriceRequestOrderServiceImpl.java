@@ -29,7 +29,7 @@ public class PriceRequestOrderServiceImpl implements PriceRequestOrderService {
     PriceRequestOrderRepository priceRequestOrderRepository;
 
     @Override
-    public List<PriceRequestOrder> getOrdersForUser() {
+    public List<PriceRequestOrder> getOrdersBelongingToSellerUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findByEmail(auth.getName());
         return priceRequestOrderRepository.findByUserId(user.getId());
