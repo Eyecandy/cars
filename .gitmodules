@@ -1,0 +1,3 @@
+[submodule "webapp/src/frontend-digicar"]
+	path = webapp/src/frontend-digicar
+	url = git@github.com:Eyecandy/frontend-digicar.git
