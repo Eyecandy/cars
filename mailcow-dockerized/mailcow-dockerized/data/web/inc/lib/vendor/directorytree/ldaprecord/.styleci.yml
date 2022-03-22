@@ -1,4 +1,0 @@
-preset: laravel
-enabled:
-  - phpdoc_align
-  - unalign_double_arrow
