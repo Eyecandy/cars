@@ -110,10 +110,13 @@ public class PriceRequestControllerIntegrationTest {
 
         PriceRequest priceRequest = new PriceRequest();
         priceRequest.setUser(customerUser);
-        priceRequest.setCarBrandId(toyota.getId());
+        priceRequest.setCarBrand(toyota);
         priceRequest.setConfiguration("/path/file.pdf");
         priceRequest.setConfigMethodId(1);
-        priceRequest.setCountyId(1);
+        County county = new County();
+        county.setName("Agder");
+        county.setId(1);
+        priceRequest.setCounty(county);
 
     }
 

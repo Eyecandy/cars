@@ -11,7 +11,7 @@
           method="post" style="max-width: 600px; margin: 0 auto;">
 
         <div class="m-3">
-            <label for="cars">Velg et fylke:</label>
+            <label for="cars">Velg en bil:</label>
 
             <select name="cars" id="cars">
                 <option value="volvo">Volvo</option>
@@ -21,11 +21,11 @@
             </select>
 
 
-            <label for="cars">Velg en bil:</label>
+            <label for="cars">Velg et fylke:</label>
 
-            <select class="form-control" th:field="${priceRequest.countyId}"  id="dropOperator">
+            <select class="form-control" th:field="${priceRequest.county}"  id="dropOperator">
                 <option value="0">velg fylke</option>
-                <option th:each="county : ${counties}" th:value="1" th:text="${county}"></option>
+                <option th:each="county : ${counties}" th:value="county.id" th:text="${county.name}"></option>
             </select>
 
 

@@ -21,12 +21,13 @@ public class PriceRequest {
     private User user;
 
     @NotNull(message = "Må velge bilmerke")
-    @Column
-    private Integer carBrandId;
+    @JoinColumn(name = "car_brand_id", nullable = false)
+    private CarBrand carBrand;
 
     @NotNull(message = "Må velge fylke")
-    @Column
-    private Integer countyId;
+    @OneToOne
+    @JoinColumn(name = "county_id", nullable = false)
+    private County county;
 
     @NotNull(message = "Må velge konfigmetode")
     @Column

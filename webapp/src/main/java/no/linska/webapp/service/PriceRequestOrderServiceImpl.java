@@ -41,7 +41,7 @@ public class PriceRequestOrderServiceImpl implements PriceRequestOrderService {
 
 
     public void createPriceRequestOrdersAsync(PriceRequest priceRequest) {
-        CarBrand carBrand = fetchCarBrand(priceRequest.getCarBrandId());
+        CarBrand carBrand = fetchCarBrand(priceRequest.getCarBrand().getId());
         Collection<Retailer> retailers = fetchRetailers(carBrand);
         Set<Seller> sellers = fetchSellers(retailers);
         Set<PriceRequestOrder> priceRequestOrders = new HashSet<>();
