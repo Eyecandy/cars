@@ -1,7 +1,7 @@
 package no.linska.webapp.controller;
 
-import no.linska.webapp.entity.County;
 import no.linska.webapp.entity.PriceRequest;
+import no.linska.webapp.service.CarBrandServiceImpl;
 import no.linska.webapp.service.CountyServiceImpl;
 import no.linska.webapp.service.PriceRequestOrderService;
 import no.linska.webapp.service.PriceRequestService;
@@ -28,14 +28,20 @@ public class PriceRequestController {
     @Autowired
     CountyServiceImpl countyService;
 
+    @Autowired
+    CarBrandServiceImpl carBrandService;
+
 
     @GetMapping("/pricerequest")
     public ModelAndView priceRequest() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("priceRequest", new PriceRequest());
-        List<County> counties = countyService.getAllCounties();
-        modelAndView.addObject("counties",counties);
+
+        modelAndView.addObject("counties",countyService.getAllCounties());
+        modelAndView.addObject("carBrands",carBrandService.getAllCarBrands());
         modelAndView.setViewName("pricerequest");
+
+
         return modelAndView;
     }
 

@@ -11,22 +11,33 @@
           method="post" style="max-width: 600px; margin: 0 auto;">
 
         <div class="m-3">
-            <label for="cars">Velg en bil:</label>
-
-            <select name="cars" id="cars">
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-                <option value="mercedes">Mercedes</option>
-
+            <select class="form-control" th:field="${priceRequest.carBrand}"  id="carbrandDropDown">
+                <option value="0">velg bilmerke</option>
+                <option th:each="carBrand : ${carBrands}" th:value="carBrand.id" th:text="${carBrand.name}"></option>
             </select>
 
-
-            <label for="cars">Velg et fylke:</label>
-
-            <select class="form-control" th:field="${priceRequest.county}"  id="dropOperator">
+            <select class="form-control" th:field="${priceRequest.county}"  id="priceRequestDropDown">
                 <option value="0">velg fylke</option>
                 <option th:each="county : ${counties}" th:value="county.id" th:text="${county.name}"></option>
             </select>
+
+            <input type="checkbox"  th:field="${priceRequest.studdedTire}" value="true" id="studded_tire_checkbox" >
+            <label for="studded_tire_checkbox">Piggdekk</label><br>
+
+
+
+            <div class="form-group row">
+                <label class="col-4 col-form-label">URL</label>
+                <div class="col-8">
+                    <input type="text" th:field="${priceRequest.configuration}" class="form-control"/>
+                </div>
+            </div>
+
+
+
+
+
+
 
 
 

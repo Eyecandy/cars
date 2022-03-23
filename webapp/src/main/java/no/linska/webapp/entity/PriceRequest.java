@@ -39,4 +39,7 @@ public class PriceRequest {
 
     @Column
     private Date deadline;
+
+    @Column(name = "studded_tire")
+    private Boolean studdedTire;
 }
