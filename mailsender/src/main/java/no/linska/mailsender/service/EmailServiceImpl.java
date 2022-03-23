@@ -3,8 +3,6 @@ package no.linska.mailsender.service;
 
 
 import lombok.extern.slf4j.Slf4j;
-import no.linska.webapp.entity.CarBrand;
-import no.linska.webapp.repository.CarBrandRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.MailException;
@@ -27,13 +25,11 @@ public class EmailServiceImpl implements EmailService {
 
     final String NO_REPLY_EMAIL = "joakim.linska@yahoo.com";
 
-    @Autowired
-    CarBrandRepository carBrandRepository;
+
 
 
 
     public void sendSimpleMessage(String to, String subject, String text) {
-        CarBrand carBrand = new CarBrand();
         try {
 
             SimpleMailMessage message = new SimpleMailMessage();

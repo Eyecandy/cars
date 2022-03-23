@@ -3,6 +3,7 @@ package no.linska.webapp.service;
 import no.linska.webapp.entity.*;
 import no.linska.webapp.exception.DataException;
 import no.linska.webapp.exception.reason.Reason;
+import no.linska.webapp.mailsender.service.EmailServiceImpl;
 import no.linska.webapp.repository.CarBrandRepository;
 import no.linska.webapp.repository.PriceRequestOrderRepository;
 import no.linska.webapp.repository.SellerRepository;
@@ -28,6 +29,9 @@ public class PriceRequestOrderServiceImpl implements PriceRequestOrderService {
     @Autowired
     PriceRequestOrderRepository priceRequestOrderRepository;
 
+    @Autowired
+    EmailServiceImpl emailService;
+
     @Override
     public List<PriceRequestOrder> getOrdersBelongingToSellerUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -49,7 +53,12 @@ public class PriceRequestOrderServiceImpl implements PriceRequestOrderService {
             priceRequestOrders.add(priceRequestOrder);
         }
         priceRequestOrderRepository.saveAll(priceRequestOrders);
+        emailService.sendMailToSellers(priceRequestOrders,priceRequest);
     }
+
+
+
+
 
 
     private CarBrand fetchCarBrand(Integer carBrandId) {

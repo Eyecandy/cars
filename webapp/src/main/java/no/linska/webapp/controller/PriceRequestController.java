@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -24,9 +25,16 @@ public class PriceRequestController {
     PriceRequestOrderService priceRequestOrderService;
 
     @GetMapping("/pricerequest")
-    public String priceRequest() {
-
-        return "/pricerequest";
+    public ModelAndView priceRequest() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("priceRequest", new PriceRequest());
+        List<String> counties = new ArrayList<String>();
+        counties.add("Nordland");
+        counties.add("Oslo");
+        counties.add("Bodø");
+        modelAndView.addObject("counties",counties);
+        modelAndView.setViewName("pricerequest");
+        return modelAndView;
     }
 
     @PostMapping("/pricerequest")

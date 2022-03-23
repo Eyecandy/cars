@@ -139,8 +139,8 @@ public class PriceRequestControllerIntegrationTest {
        MockHttpServletRequestBuilder request = post("/pricerequest")
                 .param("carBrandId",toyota.getId().toString())
                 .param("countyId",toyota.getId().toString())
-                .param("configMethodId", "1")
-                .param("config", "1")
+                .param("configMethodId", "2")
+                .param("config", "/some/path")
                 .param("configuration","1")
                 .with(csrf());
 

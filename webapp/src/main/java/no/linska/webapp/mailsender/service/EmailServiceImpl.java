@@ -3,6 +3,8 @@ package no.linska.webapp.mailsender.service;
 
 import lombok.extern.slf4j.Slf4j;
 import no.linska.webapp.entity.CarBrand;
+import no.linska.webapp.entity.PriceRequest;
+import no.linska.webapp.entity.PriceRequestOrder;
 import no.linska.webapp.repository.CarBrandRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -15,6 +17,8 @@ import org.springframework.stereotype.Component;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Component
@@ -70,6 +74,37 @@ public class EmailServiceImpl implements EmailService {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
+    }
+
+    public void sendMailToSellers(Set<PriceRequestOrder> priceRequestOrders, PriceRequest priceRequest) {
+        System.out.println("CONFIG METHOD: " + priceRequest.getConfigMethodId());
+        if (priceRequest.getConfigMethodId() == 1) {
+            sendMailToSellerWithLink();
+        }
+        else {
+            sendMailToSellerWithAttachment();
+        }
+
+
+    }
+
+    private void sendMailToSellerWithLink() {
+        System.out.println("send mail with link");
+
+    }
+
+    private void sendMailToSellerWithAttachment() {
+        System.out.println("send mail with attachment");
+    }
+
+    private Set<String> getSellerEmails(Set<PriceRequestOrder> priceRequestOrders) {
+        return priceRequestOrders
+                .stream()
+                .map(priceRequestOrder -> priceRequestOrder
+                        .getSeller()
+                        .getUser()
+                        .getEmail()).collect(Collectors.toSet());
+
     }
 
 
