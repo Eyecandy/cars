@@ -112,7 +112,7 @@ public class PriceRequestControllerIntegrationTest {
         priceRequest.setUser(customerUser);
         priceRequest.setCarBrand(toyota);
         priceRequest.setConfiguration("/path/file.pdf");
-        priceRequest.setConfigMethodId(1);
+        priceRequest.setConfigMethod(new ConfigMethod());// fix this empty config
         County county = new County();
         county.setName("Agder");
         county.setId(1);
