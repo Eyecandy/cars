@@ -30,8 +30,9 @@ public class PriceRequest {
     private County county;
 
     @NotNull(message = "Må velge konfigmetode")
-    @Column
-    private Integer configMethodId;
+    @OneToOne
+    @JoinColumn(name = "config_method_id", nullable = false)
+    private ConfigMethod configMethod;
 
     @NotNull(message = "Konfigurasjon kan ikke være tom")
     @Column

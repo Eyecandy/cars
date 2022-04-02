@@ -77,9 +77,10 @@ public class EmailServiceImpl implements EmailService {
     }
 
     public void sendMailToSellers(Set<PriceRequestOrder> priceRequestOrders, PriceRequest priceRequest) {
-        System.out.println("CONFIG METHOD: " + priceRequest.getConfigMethodId());
-        if (priceRequest.getConfigMethodId() == 1) {
-            sendMailToSellerWithLink();
+        System.out.println("CONFIG METHOD: " + priceRequest.getConfigMethod().getId() );
+        Set<String> emails = getSellerEmails(priceRequestOrders);
+        if (priceRequest.getConfigMethod().getId() == 1) {
+            sendMailToSellerWithLink(emails,priceRequest.getConfiguration());
         }
         else {
             sendMailToSellerWithAttachment();
@@ -88,8 +89,12 @@ public class EmailServiceImpl implements EmailService {
 
     }
 
-    private void sendMailToSellerWithLink() {
+    private void sendMailToSellerWithLink(Set<String> emails, String url) {
+
         System.out.println("send mail with link");
+        System.out.println(emails);
+        System.out.println(url);
+
 
     }
 

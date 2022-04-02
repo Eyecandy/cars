@@ -1,10 +1,7 @@
 package no.linska.webapp.controller;
 
 import no.linska.webapp.entity.PriceRequest;
-import no.linska.webapp.service.CarBrandServiceImpl;
-import no.linska.webapp.service.CountyServiceImpl;
-import no.linska.webapp.service.PriceRequestOrderService;
-import no.linska.webapp.service.PriceRequestService;
+import no.linska.webapp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -31,12 +28,15 @@ public class PriceRequestController {
     @Autowired
     CarBrandServiceImpl carBrandService;
 
+    @Autowired
+    ConfigMethodServiceImpl configMethodService;
+
 
     @GetMapping("/pricerequest")
     public ModelAndView priceRequest() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("priceRequest", new PriceRequest());
-
+        modelAndView.addObject("configMethods",configMethodService.getAllConfigMethods());
         modelAndView.addObject("counties",countyService.getAllCounties());
         modelAndView.addObject("carBrands",carBrandService.getAllCarBrands());
         modelAndView.setViewName("pricerequest");
