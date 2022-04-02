@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.nio.file.Path;
 import java.util.List;
 
 @Controller
@@ -35,6 +36,7 @@ public class PriceRequestController {
     StorageService storageService;
 
 
+
     @GetMapping("/pricerequest")
     public ModelAndView priceRequest() {
         ModelAndView modelAndView = new ModelAndView();
@@ -57,10 +59,9 @@ public class PriceRequestController {
             modelAndView.setStatus(HttpStatus.BAD_REQUEST);
             return modelAndView;
         }
-        if (priceRequest.getConfigMethod().getId() == 2) {
-            storageService.store(priceRequest.getFileConfiguration());
-        }
 
+        Path storedPath = storageService.store(priceRequest.getFileConfiguration());
+        priceRequest.setConfiguration(storedPath.toString());
         priceRequestService.save(priceRequest);
         try {
             priceRequestOrderService.createPriceRequestOrdersAsync(priceRequest);

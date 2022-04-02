@@ -21,6 +21,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -40,28 +42,27 @@ public class FileSystemStorageService implements StorageService {
 	}
 
 	@Override
-	public void store(MultipartFile file) throws StorageException {
+	public Path store(MultipartFile file) throws StorageException {
+		Path storePath;
 		try {
 			if (file.isEmpty()) {
 				throw new StorageException(Reason.STORAGE_COULD_NOT_STORE_EMPTY_FILE);
 			}
-			Path userPath = getUserPath();
-			Path destinationFile = userPath.resolve(
-					Paths.get(Objects.requireNonNull(file.getOriginalFilename())))
-					.normalize().toAbsolutePath();
-			if (!destinationFile.getParent().equals(userPath.toAbsolutePath())) {
-				// This is a security check
-				Reason reason = Reason.STORAGE_MUST_BE_CORRECT_DIRECTORY;
-				throw new StorageException(reason,reason.getMessage(userPath.toAbsolutePath()));
-			}
+
+			storePath = getDestinationPath(file);
+
+
+
 			try (InputStream inputStream = file.getInputStream()) {
-				Files.copy(inputStream, destinationFile,
+				Files.copy(inputStream, storePath,
 					StandardCopyOption.REPLACE_EXISTING);
 			}
 		}
 		catch (IOException e) {
 			throw new StorageException(Reason.STORAGE_FILE_CAN_NOT_BE_STORED, e);
 		}
+		return storePath;
+
 	}
 
 	@Override
@@ -129,6 +130,23 @@ public class FileSystemStorageService implements StorageService {
 		catch (IOException e) {
 			throw new StorageException(Reason.STORAGE_COULD_NOT_INIT);
 		}
+	}
+
+	private Path getDestinationPath(MultipartFile file) {
+		Path userPath = getUserPath();
+
+		Path destinationPath =  userPath.resolve(
+						Paths.get(Objects.requireNonNull(file.getOriginalFilename()))
+								+ new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date())
+				)
+				.normalize().toAbsolutePath();
+		if (!destinationPath.getParent().equals(userPath.toAbsolutePath())) {
+			// This is a security check
+			Reason reason = Reason.STORAGE_MUST_BE_CORRECT_DIRECTORY;
+			throw new StorageException(reason,reason.getMessage(userPath.toAbsolutePath()));
+		}
+		return destinationPath;
+
 	}
 	// TODO: see if we can many calls of this function
 	// suggestion:  add user Path in custom UserDetails impl and get it from session.
