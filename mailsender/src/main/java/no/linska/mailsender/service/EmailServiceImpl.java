@@ -23,7 +23,7 @@ public class EmailServiceImpl implements EmailService {
     private JavaMailSenderImpl javaMailSender;
 
 
-    final String NO_REPLY_EMAIL = "joakim.linska@yahoo.com";
+    final String NO_REPLY_EMAIL = "NO-REPLY@digibil.no";
 
 
 
