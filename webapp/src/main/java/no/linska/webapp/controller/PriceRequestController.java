@@ -31,6 +31,9 @@ public class PriceRequestController {
     @Autowired
     ConfigMethodServiceImpl configMethodService;
 
+    @Autowired
+    StorageService storageService;
+
 
     @GetMapping("/pricerequest")
     public ModelAndView priceRequest() {
@@ -54,6 +57,10 @@ public class PriceRequestController {
             modelAndView.setStatus(HttpStatus.BAD_REQUEST);
             return modelAndView;
         }
+        if (priceRequest.getConfigMethod().getId() == 2) {
+            storageService.store(priceRequest.getFileConfiguration());
+        }
+
         priceRequestService.save(priceRequest);
         try {
             priceRequestOrderService.createPriceRequestOrdersAsync(priceRequest);

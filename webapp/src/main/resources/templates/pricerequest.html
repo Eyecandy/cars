@@ -7,7 +7,7 @@
 <body>
 <div class="container text-center">
 
-    <form th:action="@{/pricerequest}" th:object="${priceRequest}" role="form"
+    <form th:action="@{/pricerequest}" th:object="${priceRequest}" role="form" enctype="multipart/form-data"
           method="post" style="max-width: 600px; margin: 0 auto;">
 
         <div class="m-3">
@@ -45,6 +45,14 @@
                 <div class="col-8">
                     <input type="text" th:field="${priceRequest.configuration}" class="form-control"/>
                 </div>
+            </div>
+
+            <div>
+
+                <tr><td>File to upload:</td><td>
+                    <input type="file" name="file" th:field="${priceRequest.fileConfiguration}"/>
+                </td></tr>
+
             </div>
 
 
