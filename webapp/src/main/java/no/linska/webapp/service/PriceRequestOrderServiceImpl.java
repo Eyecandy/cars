@@ -8,6 +8,7 @@ import no.linska.webapp.repository.CarBrandRepository;
 import no.linska.webapp.repository.PriceRequestOrderRepository;
 import no.linska.webapp.repository.SellerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -39,8 +40,7 @@ public class PriceRequestOrderServiceImpl implements PriceRequestOrderService {
         return priceRequestOrderRepository.findByUserId(user.getId());
     }
 
-
-    public void createPriceRequestOrdersAsync(PriceRequest priceRequest) {
+    public void createPriceRequestOrders(PriceRequest priceRequest) {
         CarBrand carBrand = fetchCarBrand(priceRequest.getCarBrand().getId());
         Collection<Retailer> retailers = fetchRetailers(carBrand);
         Set<Seller> sellers = fetchSellers(retailers);
@@ -53,6 +53,10 @@ public class PriceRequestOrderServiceImpl implements PriceRequestOrderService {
             priceRequestOrders.add(priceRequestOrder);
         }
         priceRequestOrderRepository.saveAll(priceRequestOrders);
+        sendEmailsAsync(priceRequestOrders,priceRequest);
+    }
+    @Async
+    private void sendEmailsAsync(Set<PriceRequestOrder> priceRequestOrders ,PriceRequest priceRequest) {
         emailService.sendMailToSellers(priceRequestOrders,priceRequest);
     }
 

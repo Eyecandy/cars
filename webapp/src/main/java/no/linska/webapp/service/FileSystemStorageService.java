@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -130,6 +131,14 @@ public class FileSystemStorageService implements StorageService {
 		catch (IOException e) {
 			throw new StorageException(Reason.STORAGE_COULD_NOT_INIT);
 		}
+	}
+
+	public File readFile(String location) {
+		File file = new File(location);
+		if (!file.exists()) {
+			throw new StorageException(Reason.STORAGE_FILE_NOT_FOUND_EXCEPTION,location);
+		}
+		return file;
 	}
 
 	private Path getDestinationPath(MultipartFile file) {

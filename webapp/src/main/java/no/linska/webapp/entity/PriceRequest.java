@@ -22,6 +22,7 @@ public class PriceRequest {
     private User user;
 
     @NotNull(message = "Må velge bilmerke")
+    @OneToOne
     @JoinColumn(name = "car_brand_id", nullable = false)
     private CarBrand carBrand;
 

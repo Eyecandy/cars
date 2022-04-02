@@ -6,11 +6,13 @@ import java.io.File;
 
 @Component
 public interface EmailService {
-    void sendSimpleMessage(String to,
+    void sendMessage(String to,
                            String subject,
                            String text);
 
     void sendMessageWithAttachment(String to,
+                                   String subject,
+                                   String text,
                                    File file);
 
 

@@ -59,12 +59,13 @@ public class PriceRequestController {
             modelAndView.setStatus(HttpStatus.BAD_REQUEST);
             return modelAndView;
         }
-
-        Path storedPath = storageService.store(priceRequest.getFileConfiguration());
-        priceRequest.setConfiguration(storedPath.toString());
+        if (priceRequest.getConfigMethod().getId() == 2) {
+            Path storedPath = storageService.store(priceRequest.getFileConfiguration());
+            priceRequest.setConfiguration(storedPath.toString());
+        }
         priceRequestService.save(priceRequest);
         try {
-            priceRequestOrderService.createPriceRequestOrdersAsync(priceRequest);
+            priceRequestOrderService.createPriceRequestOrders(priceRequest);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

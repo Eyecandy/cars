@@ -2,14 +2,11 @@ package no.linska.webapp.mailsender.service;
 
 
 import lombok.extern.slf4j.Slf4j;
-import no.linska.webapp.entity.CarBrand;
 import no.linska.webapp.entity.PriceRequest;
 import no.linska.webapp.entity.PriceRequestOrder;
 import no.linska.webapp.repository.CarBrandRepository;
+import no.linska.webapp.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
@@ -34,40 +31,43 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     CarBrandRepository carBrandRepository;
 
+    @Autowired
+    StorageService storageService;
 
 
-    public void sendSimpleMessage(String to, String subject, String text) {
-        CarBrand carBrand = new CarBrand();
+
+    public void sendMessage(String to,String subject,String text) {
+
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = null;
         try {
-
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom(NO_REPLY_EMAIL);
-            message.setTo(to);
-            message.setSubject(subject);
-            message.setText(text);
+            helper = new MimeMessageHelper(message, true);
+            helper.setFrom(NO_REPLY_EMAIL);
+            helper.setTo(to);
+            helper.setText(text, false);
+            helper.setSubject(subject);
             javaMailSender.send(message);
-            log.info("SENT SIMPLE MESSAGE");
-        } catch (MailException exception) {
-            exception.printStackTrace();
+            log.info("SENT MESSAGE WITH ATTACHMENT");
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
         }
     }
 
 
 
     @Override
-    public void sendMessageWithAttachment(String to,File file) {
+    public void sendMessageWithAttachment(String to,String subject,String text,File file) {
 
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = null;
         try {
-
             helper = new MimeMessageHelper(message, true);
             helper.setFrom(NO_REPLY_EMAIL);
             helper.setTo(to);
-            helper.setText("text", true);
-            FileSystemResource fileSystemResource  = new FileSystemResource(file);
-            helper.addAttachment(file.getName(), file);
-            helper.setSubject("Hi - test");
+            helper.setText(text, false);
+            helper.addAttachment("bil-konfig.pdf" , file);
+            helper.setSubject(subject);
             javaMailSender.send(message);
             log.info("SENT MESSAGE WITH ATTACHMENT");
 
@@ -77,29 +77,48 @@ public class EmailServiceImpl implements EmailService {
     }
 
     public void sendMailToSellers(Set<PriceRequestOrder> priceRequestOrders, PriceRequest priceRequest) {
-        System.out.println("CONFIG METHOD: " + priceRequest.getConfigMethod().getId() );
+        System.out.println("CONFIG METHOD: " + priceRequest.getConfigMethod().getName() );
         Set<String> emails = getSellerEmails(priceRequestOrders);
         if (priceRequest.getConfigMethod().getId() == 1) {
-            sendMailToSellerWithLink(emails,priceRequest.getConfiguration());
+            String text = createText(priceRequest) + "\nLink til konfigurasjon: " + priceRequest.getConfiguration();
+
+            sendMailToSellerWithLink(emails,text);
         }
         else {
-            sendMailToSellerWithAttachment();
+
+            sendMailToSellerWithAttachment(emails,createText(priceRequest) ,storageService.readFile(priceRequest.getConfiguration()));
         }
 
 
     }
 
-    private void sendMailToSellerWithLink(Set<String> emails, String url) {
+    private String createText(PriceRequest priceRequest) {
+        String isStuddedTireRequested = "Nei";
+        if (priceRequest.getStuddedTire()) {
+            isStuddedTireRequested = "Ja";
 
-        System.out.println("send mail with link");
-        System.out.println(emails);
-        System.out.println(url);
+        }
+        String studdedTires = "Vil ha piggdekk: " + isStuddedTireRequested;
+        String county = "Fylke som bilen skal leveres til: " + priceRequest.getCounty().getName();
+        return studdedTires + "\n" + county;
+
+    }
+
+    private void sendMailToSellerWithLink(Set<String> emails, String text) {
+        for (String email: emails) {
+            sendMessage(email,
+                    "Bil konfigurasjon på vegne av DigiBil",
+                    text);
+        }
 
 
     }
 
-    private void sendMailToSellerWithAttachment() {
-        System.out.println("send mail with attachment");
+    private void sendMailToSellerWithAttachment(Set<String> emails, String text, File file) {
+        for (String email : emails) {
+            sendMessageWithAttachment(email,"Bil konfigurasjon på vegne av DigiBil",text,file);
+        }
+
     }
 
     private Set<String> getSellerEmails(Set<PriceRequestOrder> priceRequestOrders) {

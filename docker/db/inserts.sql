@@ -51,7 +51,19 @@ values
 (11,11), (12,12), (13,13), (14,14)
 
 returning retailer_id, car_brand_id;
+
 -- insert seller users
-insert into user_account
+insert into user_account (user_id, email, role_id,enabled)
+values
+
+(101,'seller1@linska.local',2,false),
+(102,'seller2@linska.local',2,false),
+(103,'seller3@linska.local',2,false)
+
+insert into seller (seller_id, user_id, retailer_id)
+values
+(101, 101,1),
+(102, 102,2),
+(103, 103,3)
 
 
