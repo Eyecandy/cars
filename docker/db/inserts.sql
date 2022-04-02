@@ -33,7 +33,7 @@ values (1, 'Link'), (2, 'PDF')
 RETURNING config_method_id, name;
 
 -- create retailers
-insert into retailer (org_number, name)
+insert into retailer (retailer_id, name)
 values
 (1, 'cardealer1'), (2, 'cardealer2'), (3, 'cardealer3'),
 (4, 'cardealer4'), (5, 'cardealer5'),(6, 'cardealer6'),
@@ -41,16 +41,17 @@ values
 (10,'cardealer10'), (11,'cardealer11'), (12,'cardealer12'),
 (13,'cardealer13'), (14,'cardealer14')
 
-RETURNING org_number, name
+RETURNING org_number, name;
 
 -- insert one car dealer for each brand
-insert into retailer_car_brands (org_number, car_brand_id)
+insert into retailer_car_brands (retailer_id, car_brand_id)
 values
 (1,1), (2,2), (3,3), (4,4), (5,5),
 (6,6), (7,7), (8,8), (9,9), (10,10),
 (11,11), (12,12), (13,13), (14,14)
 
-returning org_number, car_brand
+returning retailer_id, car_brand_id;
+-- insert seller users
+insert into user_account
 
 
-RETURNING org_number, name

@@ -19,7 +19,7 @@ public class Seller {
     private User user;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "org_number", nullable = false)
+    @JoinColumn(name = "retailer_id", nullable = false)
     private Retailer retailer;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "seller")
