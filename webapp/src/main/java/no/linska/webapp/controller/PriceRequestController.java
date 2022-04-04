@@ -1,8 +1,7 @@
 package no.linska.webapp.controller;
 
 import no.linska.webapp.entity.PriceRequest;
-import no.linska.webapp.service.PriceRequestOrderService;
-import no.linska.webapp.service.PriceRequestService;
+import no.linska.webapp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.nio.file.Path;
 import java.util.List;
 
 @Controller
@@ -23,10 +23,31 @@ public class PriceRequestController {
     @Autowired
     PriceRequestOrderService priceRequestOrderService;
 
-    @GetMapping("/pricerequest")
-    public String priceRequest() {
+    @Autowired
+    CountyServiceImpl countyService;
 
-        return "/pricerequest";
+    @Autowired
+    CarBrandServiceImpl carBrandService;
+
+    @Autowired
+    ConfigMethodServiceImpl configMethodService;
+
+    @Autowired
+    StorageService storageService;
+
+
+
+    @GetMapping("/pricerequest")
+    public ModelAndView priceRequest() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("priceRequest", new PriceRequest());
+        modelAndView.addObject("configMethods",configMethodService.getAllConfigMethods());
+        modelAndView.addObject("counties",countyService.getAllCounties());
+        modelAndView.addObject("carBrands",carBrandService.getAllCarBrands());
+        modelAndView.setViewName("pricerequest");
+
+
+        return modelAndView;
     }
 
     @PostMapping("/pricerequest")
@@ -38,9 +59,13 @@ public class PriceRequestController {
             modelAndView.setStatus(HttpStatus.BAD_REQUEST);
             return modelAndView;
         }
+        if (priceRequest.getConfigMethod().getId() == 2) {
+            Path storedPath = storageService.store(priceRequest.getFileConfiguration());
+            priceRequest.setConfiguration(storedPath.toString());
+        }
         priceRequestService.save(priceRequest);
         try {
-            priceRequestOrderService.createPriceRequestOrdersAsync(priceRequest);
+            priceRequestOrderService.createPriceRequestOrders(priceRequest);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

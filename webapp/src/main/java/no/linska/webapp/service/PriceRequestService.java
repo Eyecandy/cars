@@ -24,12 +24,16 @@ public class PriceRequestService {
     @Autowired
     UserServiceImpl userService;
 
+    @Autowired
+    StorageService storageService;
+
+
+
     public void save(PriceRequest priceRequest) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByEmail(auth.getName());
         priceRequest.setUser(user);
         priceRequestRepository.save(priceRequest);
-
     }
 
     public List<PriceRequest> getUserPriceRequest() {

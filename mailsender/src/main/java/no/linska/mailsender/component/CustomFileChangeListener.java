@@ -31,7 +31,7 @@ public class CustomFileChangeListener implements FileChangeListener {
                 if(cfile.getType().equals(ChangedFile.Type.ADD)
                       && !isLocked(cfile.getFile().toPath())) {
 
-                    emailService.sendMessageWithAttachment("vw@linska.local", cfile.getFile());
+                    emailService.sendMessageWithAttachment("seller1@linska.local", cfile.getFile());
                     fileHandlerService.moveFile(cfile.getFile());
 
                 }
