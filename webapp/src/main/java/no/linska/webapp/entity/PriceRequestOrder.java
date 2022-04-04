@@ -26,4 +26,8 @@ public class PriceRequestOrder {
 
     private Long totalPrice;
 
+    private boolean sent = false;
+
+    private boolean answered = false;
+
 }

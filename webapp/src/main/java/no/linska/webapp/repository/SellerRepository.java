@@ -11,6 +11,6 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface SellerRepository extends CrudRepository<Seller, Long> {
-    @Query(value = "SELECT * FROM seller WHERE org_number in :retailers", nativeQuery = true)
+    @Query(value = "SELECT * FROM seller WHERE retailer_id in :retailers", nativeQuery = true)
     Optional<Set<Seller> > findByRetailer(@Param("retailers") Collection<Retailer> retailers);
 }

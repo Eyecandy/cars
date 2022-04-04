@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>send in konfig</title>
+</head>
+<body>
+<div class="container text-center">
+
+    <form th:action="@{/pricerequest}" th:object="${priceRequest}" role="form" enctype="multipart/form-data"
+          method="post" style="max-width: 600px; margin: 0 auto;">
+
+        <div class="m-3">
+            <div>
+                <select class="form-control" th:field="${priceRequest.carBrand}"  id="carbrandDropDown">
+                    <option value="0">velg bilmerke</option>
+                    <option th:each="carBrand : ${carBrands}"
+                            th:value="${carBrand.id}"
+                            th:text="${carBrand.name}">
+                    </option>
+                </select>
+            </div>
+
+            <div>
+
+                <select class="form-control" th:field="${priceRequest.county}"  id="priceRequestDropDown">
+                    <option value="0">velg fylke</option>
+                    <option th:each="county : ${counties}"
+                            th:value="${county.id}"
+                            th:text="${county.name}">
+                    </option>
+                </select>
+
+            </div>
+
+
+            <div>
+                <input type="checkbox"  th:field="${priceRequest.studdedTire}" value="true" id="studded_tire_checkbox" >
+                <label for="studded_tire_checkbox">Piggdekk</label><br>
+            </div>
+
+
+            <div class="form-group row">
+                <label class="col-4 col-form-label">URL</label>
+                <div class="col-8">
+                    <input type="text" th:field="${priceRequest.configuration}" class="form-control"/>
+                </div>
+            </div>
+
+            <div>
+
+                <tr><td>File to upload:</td><td>
+                    <input type="file" name="file" th:field="${priceRequest.fileConfiguration}"/>
+                </td></tr>
+
+            </div>
+
+
+            <div class="form-group">
+                <label>Send fil eller link</label>
+                <div th:each="configMethod: ${configMethods}">
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" th:field="${priceRequest.configMethod}" th:value="${configMethod.id}" class="custom-control-input">
+                        <label th:text="${configMethod.name}">model</label>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <button type="submit" class="btn btn-primary">Send Inn</button>
+            </div>
+
+            </div>
+
+
+    </form>
+
+</div>
+
+</body>
+</html>
