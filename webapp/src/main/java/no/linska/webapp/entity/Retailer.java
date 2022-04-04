@@ -14,6 +14,11 @@ import java.util.Set;
 public class Retailer implements Serializable {
 
     @Id
+    @GeneratedValue
+    @Column(name = "retailer_id")
+    private Long id;
+
+
     @Column(name = "org_number")
     private Long orgNumber;
 
@@ -25,7 +30,7 @@ public class Retailer implements Serializable {
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(name = "retailer_car_brands",
             joinColumns = {
-                    @JoinColumn(name = "org_number", referencedColumnName = "org_number",
+                    @JoinColumn(name = "retailer_id", referencedColumnName = "retailer_id",
                             nullable = false, updatable = false)},
             inverseJoinColumns = {
                     @JoinColumn(name = "car_brand_id", referencedColumnName = "car_brand_id",

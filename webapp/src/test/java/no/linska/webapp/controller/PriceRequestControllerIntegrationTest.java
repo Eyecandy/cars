@@ -110,10 +110,13 @@ public class PriceRequestControllerIntegrationTest {
 
         PriceRequest priceRequest = new PriceRequest();
         priceRequest.setUser(customerUser);
-        priceRequest.setCarBrandId(toyota.getId());
+        priceRequest.setCarBrand(toyota);
         priceRequest.setConfiguration("/path/file.pdf");
-        priceRequest.setConfigMethodId(1);
-        priceRequest.setCountyId(1);
+        priceRequest.setConfigMethod(new ConfigMethod());// fix this empty config
+        County county = new County();
+        county.setName("Agder");
+        county.setId(1);
+        priceRequest.setCounty(county);
 
     }
 
@@ -139,8 +142,8 @@ public class PriceRequestControllerIntegrationTest {
        MockHttpServletRequestBuilder request = post("/pricerequest")
                 .param("carBrandId",toyota.getId().toString())
                 .param("countyId",toyota.getId().toString())
-                .param("configMethodId", "1")
-                .param("config", "1")
+                .param("configMethodId", "2")
+                .param("config", "/some/path")
                 .param("configuration","1")
                 .with(csrf());
 
