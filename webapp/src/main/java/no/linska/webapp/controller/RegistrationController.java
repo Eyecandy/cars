@@ -52,6 +52,8 @@ public class RegistrationController {
             modelAndView.setViewName("register");
             modelAndView.addObject("user", user);
             modelAndView.setStatus(HttpStatus.BAD_REQUEST);
+            System.out.println(bindingResult.getAllErrors());
+            System.out.println(user);
             return modelAndView;
         }
 
@@ -67,7 +69,7 @@ public class RegistrationController {
                     );
             return modelAndView;
         }
-
+        System.out.println(user);
         userService.register(user);
         storageService.createUserDir(user.getId().toString());
         modelAndView.setViewName("registration_complete");

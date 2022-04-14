@@ -1,8 +1,6 @@
 package no.linska.webapp.entity;
 
 import lombok.Data;
-import no.linska.webapp.validator.email.ValidEmail;
-import no.linska.webapp.validator.password.MatchingPassword;
 import no.linska.webapp.validator.password.NoWhiteSpaceAllowed;
 
 import javax.persistence.*;
@@ -12,7 +10,6 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 
-@MatchingPassword(message = "Passordene må matches")
 @Entity(name = "user_account")
 @Data
 public class User implements Serializable {
@@ -38,17 +35,14 @@ public class User implements Serializable {
 
     @Column(unique = true)
     @NotBlank(message = "Epost adresse kan ikke være tom")
-    @ValidEmail
     private String email;
 
     @Column(name = "password")
     @Size(min = 8, max = 60, message = "Passordet må minst ha 8 tegn")
     @NotBlank(message = "Passordet kan ikke være tomt")
-    @NoWhiteSpaceAllowed(message = "Mellomrom kan ikke brukes i passord")
+
     private String password;
 
-    @Transient
-    private String matchingPassword;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     List<PriceRequest> priceRequestList;
