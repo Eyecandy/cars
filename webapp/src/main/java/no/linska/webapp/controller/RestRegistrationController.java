@@ -1,6 +1,6 @@
 package no.linska.webapp.controller;
 
-import no.linska.webapp.dto.UserRegistrationDto;
+import no.linska.webapp.dto.RegistrationRequestDto;
 import no.linska.webapp.entity.User;
 import no.linska.webapp.entity.UserRole;
 import no.linska.webapp.service.StorageService;
@@ -26,9 +26,9 @@ public class RestRegistrationController {
     StorageService storageService;
 
 
-    @PostMapping("/api/register")
+    @PostMapping("/api/auth/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerBuyer(@RequestBody @Valid UserRegistrationDto userRegistrationDto, BindingResult bindingResult) {
+    public void registerBuyer(@RequestBody @Valid RegistrationRequestDto userRegistrationDto, BindingResult bindingResult) {
         //TODO: HANDLE ERROR IN BINDING RESULT
         if (bindingResult.hasErrors()) {
             System.out.println(bindingResult.getAllErrors());
