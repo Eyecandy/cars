@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 
 @Data
 @MatchingPassword(message = "passwords doesn't match")
-public class UserDto {
+public class UserRegistrationDto {
     @NotBlank
     @ValidEmail
     private String email;
