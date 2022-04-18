@@ -18,21 +18,17 @@ public class JwtUtils {
     @Value("${app.jwtExpirationMs}")
     private int jwtExpirationMs;
     public String generateJwtToken(Authentication authentication) {
-        System.out.println("generateJwtToken");
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
         return Jwts.builder().setSubject((userPrincipal.getUsername())).setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs)).signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
     public String getUserNameFromJwtToken(String token) {
-        System.out.println("getUserNameFromJwtToken");
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
     }
-    public boolean validateJwtToken(String authToken) {
-        System.out.println("TRY VALIDATE");
+    public boolean validateJwtToken(String authToken) {;
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
-            System.out.println("VALIDATED");
             return true;
         }  catch (MalformedJwtException e) {
             logger.error("Invalid JWT token: {}", e.getMessage());

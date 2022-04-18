@@ -46,6 +46,8 @@ public class PriceRequest {
     @Column
     private Date deadline;
 
-    @Column(name = "studded_tire")
-    private Boolean studdedTire;
+    @NotNull(message = "Dekk valg kan ikke være tom")
+    @OneToOne
+    @JoinColumn(name = "tire_option_id", nullable = false)
+    private TireOption tireOption;
 }

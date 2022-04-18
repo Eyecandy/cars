@@ -94,11 +94,8 @@ public class EmailServiceImpl implements EmailService {
 
     private String createText(PriceRequest priceRequest) {
         String isStuddedTireRequested = "Nei";
-        if (priceRequest.getStuddedTire()) {
-            isStuddedTireRequested = "Ja";
 
-        }
-        String studdedTires = "Vil ha piggdekk: " + isStuddedTireRequested;
+        String studdedTires = "Vil ha dekktype " + priceRequest.getTireOption().getName();
         String county = "Fylke som bilen skal leveres til: " + priceRequest.getCounty().getName();
         return studdedTires + "\n" + county;
 
