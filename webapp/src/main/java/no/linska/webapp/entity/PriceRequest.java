@@ -3,7 +3,6 @@ package no.linska.webapp.entity;
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -40,10 +39,8 @@ public class PriceRequest {
     @Column
     private String configuration;
 
-    @Transient
-    private MultipartFile fileConfiguration;
 
-    @Column
+    @NotNull
     private Date deadline;
 
     @NotNull(message = "Dekk valg kan ikke være tom")

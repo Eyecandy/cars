@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -30,9 +31,19 @@ public class PriceRequestService {
 
 
     public void save(PriceRequest priceRequest) {
+
+        Calendar c = Calendar.getInstance(); // starts with today's date and time
+        c.add(Calendar.DAY_OF_YEAR, 2);  // advances day by 2
+        priceRequest.setDeadline(c.getTime());
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(auth.getName());
+        System.out.println(auth.getCredentials());
+        System.out.println(auth.getPrincipal());
+        System.out.println("WOW");
         User user = userRepository.findByEmail(auth.getName());
+        System.out.println(user);
         priceRequest.setUser(user);
+        System.out.println(priceRequest);
         priceRequestRepository.save(priceRequest);
     }
 
