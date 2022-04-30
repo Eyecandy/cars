@@ -7,9 +7,11 @@ import no.linska.webapp.entity.County;
 import no.linska.webapp.entity.TireOption;
 
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Data
 public class PriceRequestDto {
+    private long id;
 
     @NotNull(message = "Må velge bilmerke")
     private CarBrand carBrand;
@@ -24,6 +26,10 @@ public class PriceRequestDto {
 
     @NotNull
     private ConfigMethod configMethod;
+
+    private Date deadline;
+
+
 
 
 

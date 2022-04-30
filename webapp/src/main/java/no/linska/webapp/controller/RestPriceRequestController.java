@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController()
@@ -37,10 +38,13 @@ public class RestPriceRequestController {
     PriceRequestService priceRequestService;
 
 
-    @GetMapping("/list")
-    public void getPriceRequest() {
-
-
+    @GetMapping("/list_price_request")
+    public ResponseEntity<?> getPriceRequest() {
+        List<PriceRequestDto> priceRequestDtos = new ArrayList<>();
+        for (PriceRequest priceRequest: priceRequestService.getUserPriceRequest()) {
+            priceRequestDtos.add(convertPriceRequest(priceRequest));
+        }
+        return ResponseEntity.ok().body(priceRequestDtos);
     }
 
     @GetMapping("/dropdownvalues")
@@ -62,14 +66,12 @@ public class RestPriceRequestController {
         }
         PriceRequest priceRequest = new PriceRequest();
 
-        System.out.println("IN HERE");
-        System.out.println(priceRequestDTO.getLink());
-        if (priceRequestDTO.getConfigMethod().getName().equals("Link") && multipartFile != null) {
+        if (priceRequestDTO.getConfigMethod().getName().equals("Link")  && !priceRequestDTO.getLink().isBlank()) {
             String link = priceRequestDTO.getLink();
             priceRequest.setConfiguration(link);
 
         }
-        else if (priceRequestDTO.getConfigMethod().getName().equals("PDF") && !priceRequestDTO.getLink().isBlank()) {
+        else if (priceRequestDTO.getConfigMethod().getName().equals("PDF") && multipartFile != null) {
             Path storedPath = storageService.store(multipartFile);
             priceRequest.setConfiguration(storedPath.toString());
         }
@@ -86,11 +88,23 @@ public class RestPriceRequestController {
         priceRequest.setCounty(county);
         priceRequest.setTireOption(tireOption);
 
-
         priceRequestService.save(priceRequest);
 
         return ResponseEntity.ok("my custom created");
 
+    }
+
+    private PriceRequestDto convertPriceRequest(PriceRequest priceRequest) {
+        PriceRequestDto priceRequestDto = new PriceRequestDto();
+        priceRequestDto.setCounty(priceRequest.getCounty());
+        priceRequestDto.setDeadline(priceRequest.getDeadline());
+        priceRequestDto.setTireOption(priceRequest.getTireOption());
+        priceRequestDto.setCarBrand(priceRequest.getCarBrand());
+        priceRequestDto.setConfigMethod(priceRequest.getConfigMethod());
+        priceRequestDto.setLink(priceRequest.getConfiguration());
+        priceRequestDto.setId(priceRequest.getId());
+
+        return priceRequestDto;
     }
 
 }
