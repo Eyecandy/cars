@@ -43,6 +43,8 @@ public class PriceRequestDto {
 
     private CarBrandDto carBrandDto;
 
+    private String configuration;
+
 
 
 

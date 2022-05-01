@@ -3,6 +3,8 @@ package no.linska.webapp.service;
 
 import no.linska.webapp.entity.PriceRequest;
 import no.linska.webapp.entity.User;
+import no.linska.webapp.exception.reason.ProcessingException;
+import no.linska.webapp.exception.reason.Reason;
 import no.linska.webapp.repository.PriceRequestRepository;
 import no.linska.webapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +33,9 @@ public class PriceRequestService {
 
 
 
-    public void save(PriceRequest priceRequest) {
+
+
+    public void save(PriceRequest priceRequest) throws InterruptedException {
 
         Calendar c = Calendar.getInstance(); // starts with today's date and time
         c.add(Calendar.HOUR, 48);  // advances day by 2
@@ -39,8 +43,9 @@ public class PriceRequestService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByEmail(auth.getName());
         priceRequest.setUser(user);
-
         priceRequestRepository.save(priceRequest);
+
+
     }
 
 
@@ -50,6 +55,30 @@ public class PriceRequestService {
 
         return user.getPriceRequestList();
     }
+
+    public PriceRequest getPriceRequest(Long priceRequestId) {
+        var optionalPriceRequest = priceRequestRepository.findById(priceRequestId);
+        if (optionalPriceRequest.isEmpty()) {
+            throw new ProcessingException(Reason.PRICE_REQUEST_DOES_NOT_EXIST, priceRequestId.toString());
+        }
+        priceBelongToUserCheck(optionalPriceRequest.get());
+
+       return optionalPriceRequest.get();
+    }
+
+    private void priceBelongToUserCheck(PriceRequest priceRequest) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findByEmail(auth.getName());
+        if (user.getId() != priceRequest.getUser().getId()) {
+
+            String msg = String.format("Pricerequest doesnt belong to user. user id: %s priceRequest id: %s", user.getId(), priceRequest.getId());
+            throw new ProcessingException(Reason.PRICE_REQUEST_DOES_NOT_BELONG_TO_USER, msg);
+        }
+
+
+    }
+
+
 
 
 }

@@ -3,14 +3,21 @@ package no.linska.webapp.controller;
 
 import no.linska.webapp.dto.PriceRequestDto;
 import no.linska.webapp.entity.*;
+import no.linska.webapp.exception.reason.ProcessingException;
+import no.linska.webapp.exception.reason.Reason;
 import no.linska.webapp.repository.TireOptionRepository;
 import no.linska.webapp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -39,9 +46,11 @@ public class RestPriceRequestController {
     @Autowired
     PriceRequestService priceRequestService;
 
-
     @Autowired
-    PriceRequestOrderServiceImpl priceRequestOrderService;
+    PriceRequestOrderService priceRequestOrderService;
+
+
+
 
     SimpleDateFormat DateFor = new SimpleDateFormat("dd-MM-yyyy");
     SimpleDateFormat TimeFor = new SimpleDateFormat("hh:mm");
@@ -69,7 +78,7 @@ public class RestPriceRequestController {
     @PostMapping("/create")
     public ResponseEntity<?> createPriceRequest(@RequestPart PriceRequestDto priceRequestDTO,
                                                 @RequestPart(value="file", required = false) MultipartFile multipartFile,
-                                                BindingResult  bindingResult){
+                                                BindingResult  bindingResult) throws InterruptedException {
 
 
         if (bindingResult.hasErrors()) {
@@ -106,7 +115,31 @@ public class RestPriceRequestController {
         priceRequestOrderService.createPriceRequestOrders(priceRequest);
 
 
+
         return ResponseEntity.ok("my custom created");
+
+    }
+
+    @GetMapping("/getfile/{priceRequestId}")
+    public ResponseEntity<?> getFileFromPriceRequest(@PathVariable  Long priceRequestId) throws IOException {
+
+
+
+        PriceRequest priceRequest = priceRequestService.getPriceRequest(priceRequestId);
+
+        if (!priceRequest.getConfigMethod().getName().equals("PDF")) {
+            throw new ProcessingException(Reason.PDF_REQUEST_ON_WRONG_CONFIG_METHOD);
+        }
+
+        File file =  storageService.readFile(priceRequest.getConfiguration());
+        ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(file.toPath()));
+        return ResponseEntity.ok()
+
+                .contentLength(file.length())
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(resource);
+
+
 
     }
 
@@ -128,6 +161,7 @@ public class RestPriceRequestController {
         priceRequestDto.setCarBrandName(priceRequest.getCarBrand().getName());
         priceRequestDto.setNumRetailersAnswered(priceRequest.getNumRetailersAnswered());
         priceRequestDto.setNumRetailersSentTo(priceRequest.getNumRetailersSentTo());
+        priceRequestDto.setConfiguration(priceRequest.getConfiguration());
 
 
         return priceRequestDto;

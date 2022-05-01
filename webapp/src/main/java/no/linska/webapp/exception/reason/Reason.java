@@ -27,7 +27,13 @@ public enum Reason {
 
     CAR_BRAND_IS_EMPTY("Carbrand with id %s is Empty", "s7"),
     NO_RETAILERS_IN_CAR_BRAND("No retailers for selected car brand %s","s8"),
-    NO_SELLERS_IN_RETAILERS("No sellers where found from retailers %s", "s9");
+    NO_SELLERS_IN_RETAILERS("No sellers where found from retailers %s", "s9"),
+
+    PRICE_REQUEST_DOES_NOT_EXIST("Can not find priceRequest %s", "s10"),
+    PRICE_REQUEST_DOES_NOT_BELONG_TO_USER("PriceRequest %s", "s11"),
+
+
+    PDF_REQUEST_ON_WRONG_CONFIG_METHOD("Request file, but configMethod is not PDF", "s12");
 
 
     private final String message;

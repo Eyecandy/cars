@@ -9,6 +9,8 @@ import no.linska.webapp.repository.PriceRequestOrderRepository;
 import no.linska.webapp.repository.PriceRequestRepository;
 import no.linska.webapp.repository.SellerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
+@EnableAsync
 public class PriceRequestOrderServiceImpl implements PriceRequestOrderService {
 
     @Autowired
@@ -74,12 +77,12 @@ public class PriceRequestOrderServiceImpl implements PriceRequestOrderService {
 
 
 
-        //sendEmailsAsync(priceRequestOrders,priceRequest);
+        sendEmailsAsync(priceRequestOrders,priceRequest);
     }
 
 
 
-    //@Async
+    @Async
     private void sendEmailsAsync(Set<PriceRequestOrder> priceRequestOrders ,PriceRequest priceRequest) {
         emailService.sendMailToSellers(priceRequestOrders,priceRequest);
     }
