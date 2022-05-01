@@ -14,4 +14,10 @@ public interface PriceRequestOrderRepository  extends CrudRepository<PriceReques
             "where user_id = ?)", nativeQuery = true)
     List<PriceRequestOrder> findByUserId(Long id);
 
+
+    @Query(value = "select * from price_request_order\n" +
+            "where price_request_id = ?"
+            , nativeQuery = true)
+    List<PriceRequestOrder> findPriceRequestId(Long id);
+
 }

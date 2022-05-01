@@ -29,6 +29,20 @@ public class PriceRequestDto {
 
     private Date deadline;
 
+    private String deadlineDatePretty;
+
+    private String deadlineTimePretty;
+
+    private boolean deadLineReached;
+
+    private Integer numRetailersSentTo;
+
+    private Integer numRetailersAnswered;
+
+    private String carBrandName;
+
+    private CarBrandDto carBrandDto;
+
 
 
 

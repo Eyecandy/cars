@@ -1,5 +1,6 @@
 package no.linska.webapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,6 +20,8 @@ public class CarBrand implements Serializable {
     @Column(name = "car_brand_name")
     private String name;
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "carBrands")
+
+    @ManyToMany(mappedBy = "carBrands")
+    @JsonIgnore
     private Collection<Retailer> retailers = new HashSet<>();
 }

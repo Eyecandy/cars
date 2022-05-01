@@ -47,4 +47,9 @@ public class PriceRequest {
     @OneToOne
     @JoinColumn(name = "tire_option_id", nullable = false)
     private TireOption tireOption;
+
+    @Column(name = "num_retailers_sent_to")
+    private Integer numRetailersSentTo;
+    @Column(name = "num_retailers_answered")
+    private Integer numRetailersAnswered;
 }

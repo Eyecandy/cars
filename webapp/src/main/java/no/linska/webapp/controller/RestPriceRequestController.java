@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Path;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @RestController()
@@ -38,6 +40,14 @@ public class RestPriceRequestController {
     PriceRequestService priceRequestService;
 
 
+    @Autowired
+    PriceRequestOrderServiceImpl priceRequestOrderService;
+
+    SimpleDateFormat DateFor = new SimpleDateFormat("dd-MM-yyyy");
+    SimpleDateFormat TimeFor = new SimpleDateFormat("hh:mm");
+    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+
     @GetMapping("/list_price_request")
     public ResponseEntity<?> getPriceRequest() {
         List<PriceRequestDto> priceRequestDtos = new ArrayList<>();
@@ -50,7 +60,7 @@ public class RestPriceRequestController {
     @GetMapping("/dropdownvalues")
     public ResponseEntity<?> getAvailableCarBrands() {
 
-        return ResponseEntity.ok(List.of(carBrandService.getAllCarBrands(),
+        return ResponseEntity.ok(List.of(carBrandService.getAllCarBrandDtos(),
                 tireOptionRepository.findAll(),
                 configMethodService.getAllConfigMethods(),
                 countyService.getAllCounties()));
@@ -61,16 +71,19 @@ public class RestPriceRequestController {
                                                 @RequestPart(value="file", required = false) MultipartFile multipartFile,
                                                 BindingResult  bindingResult){
 
+
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
         PriceRequest priceRequest = new PriceRequest();
+
 
         if (priceRequestDTO.getConfigMethod().getName().equals("Link")  && !priceRequestDTO.getLink().isBlank()) {
             String link = priceRequestDTO.getLink();
             priceRequest.setConfiguration(link);
 
         }
+
         else if (priceRequestDTO.getConfigMethod().getName().equals("PDF") && multipartFile != null) {
             Path storedPath = storageService.store(multipartFile);
             priceRequest.setConfiguration(storedPath.toString());
@@ -80,6 +93,7 @@ public class RestPriceRequestController {
         }
 
         CarBrand carBrand = priceRequestDTO.getCarBrand();
+
         County county = priceRequestDTO.getCounty();
         TireOption tireOption = priceRequestDTO.getTireOption();
         ConfigMethod configMethod = priceRequestDTO.getConfigMethod();
@@ -89,6 +103,8 @@ public class RestPriceRequestController {
         priceRequest.setTireOption(tireOption);
 
         priceRequestService.save(priceRequest);
+        priceRequestOrderService.createPriceRequestOrders(priceRequest);
+
 
         return ResponseEntity.ok("my custom created");
 
@@ -97,12 +113,22 @@ public class RestPriceRequestController {
     private PriceRequestDto convertPriceRequest(PriceRequest priceRequest) {
         PriceRequestDto priceRequestDto = new PriceRequestDto();
         priceRequestDto.setCounty(priceRequest.getCounty());
+
+        Calendar c = Calendar.getInstance();
+        String stringDate = DateFor.format(priceRequest.getDeadline());
+        String stringTime = TimeFor.format(priceRequest.getDeadline());
+        priceRequestDto.setDeadlineDatePretty(stringDate);
+        priceRequestDto.setDeadlineTimePretty(stringTime);
         priceRequestDto.setDeadline(priceRequest.getDeadline());
         priceRequestDto.setTireOption(priceRequest.getTireOption());
-        priceRequestDto.setCarBrand(priceRequest.getCarBrand());
         priceRequestDto.setConfigMethod(priceRequest.getConfigMethod());
         priceRequestDto.setLink(priceRequest.getConfiguration());
         priceRequestDto.setId(priceRequest.getId());
+        priceRequestDto.setDeadLineReached(priceRequest.getDeadline().before(c.getTime()));
+        priceRequestDto.setCarBrandName(priceRequest.getCarBrand().getName());
+        priceRequestDto.setNumRetailersAnswered(priceRequest.getNumRetailersAnswered());
+        priceRequestDto.setNumRetailersSentTo(priceRequest.getNumRetailersSentTo());
+
 
         return priceRequestDto;
     }
