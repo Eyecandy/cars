@@ -1,10 +1,12 @@
 package no.linska.webapp.controller;
 
 
+import no.linska.webapp.dto.EmailDto;
 import no.linska.webapp.dto.LoginRequestDto;
 import no.linska.webapp.dto.RegistrationRequestDto;
 import no.linska.webapp.entity.User;
 import no.linska.webapp.entity.UserRole;
+import no.linska.webapp.mailsender.service.EmailService;
 import no.linska.webapp.repository.UserRoleRepository;
 import no.linska.webapp.responses.JwtResponse;
 import no.linska.webapp.responses.MessageResponse;
@@ -24,7 +26,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-
 import java.util.stream.Collectors;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -42,6 +43,10 @@ public class AuthController {
     StorageService storageService;
     @Autowired
     JwtUtils jwtUtils;
+
+    @Autowired
+    EmailService emailService;
+
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequestDto loginRequest, BindingResult bindingResult) {
 
@@ -98,4 +103,20 @@ public class AuthController {
 
         return ResponseEntity.ok().body(new MessageResponse("Din e-post: " + user.getEmail() +" er registrert"));
     }
+
+    @PostMapping("/resetpassword")
+    public ResponseEntity<?> resetPassword(@RequestBody EmailDto emailHolder) {
+        User user = userService.findByEmail(emailHolder.getEmail());
+
+        if (user != null) {
+            String generatedString = "temp_password";
+            String text = "\nDitt nye passord er: " +generatedString + "\n";
+            user.setPassword(generatedString);
+            userService.register(user);
+            emailService.sendMessage(emailHolder.getEmail(),"passord reset", text);
+        }
+
+        return ResponseEntity.ok().body("");
+    }
+
 }
