@@ -73,6 +73,9 @@ public class AuthController {
         return ResponseEntity.ok(jwtResponse);
 
     }
+
+
+
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody @Valid  RegistrationRequestDto userRegistrationDto, BindingResult bindingResult) {
 
@@ -93,6 +96,38 @@ public class AuthController {
         UserRole userRole = new UserRole();
         userRole.setType("buyer");
         userRole.setId(1);
+
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setUserRole(userRole);
+
+        userService.register(user);
+        storageService.createUserDir(user.getId().toString());
+
+        return ResponseEntity.ok().body(new MessageResponse("Din e-post: " + user.getEmail() +" er registrert"));
+    }
+
+
+    @PostMapping("/signupretailer")
+    public ResponseEntity<?> registerUserSeller(@RequestBody @Valid  RegistrationRequestDto userRegistrationDto, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            System.out.println(bindingResult.getAllErrors());
+        }
+
+        User user = userService.findByEmail(userRegistrationDto.getEmail());
+
+        if (user != null) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Email is already in use!"));
+        }
+        user = new User();
+        String email = userRegistrationDto.getEmail();
+        String password = userRegistrationDto.getPassword();
+        UserRole userRole = new UserRole();
+        userRole.setType("seller");
+        userRole.setId(2);
 
         user.setEmail(email);
         user.setPassword(password);

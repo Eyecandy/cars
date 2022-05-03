@@ -18,9 +18,11 @@ public class Seller {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "retailer_id", nullable = false)
     private Retailer retailer;
+
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "seller")
     private List<PriceRequestOrder> priceRequestOrders;

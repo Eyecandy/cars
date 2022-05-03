@@ -82,6 +82,7 @@ public class RestPriceRequestController {
 
 
         if (bindingResult.hasErrors()) {
+            System.out.println(bindingResult.getAllErrors());
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
         PriceRequest priceRequest = new PriceRequest();

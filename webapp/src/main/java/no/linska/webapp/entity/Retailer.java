@@ -1,7 +1,6 @@
 package no.linska.webapp.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -36,8 +35,9 @@ public class Retailer implements Serializable {
             inverseJoinColumns = {
                     @JoinColumn(name = "car_brand_id", referencedColumnName = "car_brand_id",
                             nullable = false, updatable = false)})
-    @JsonIgnore
+
     private Set<CarBrand> carBrands;
+
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "retailer")
     private List<Seller> sellers;
