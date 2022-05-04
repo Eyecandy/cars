@@ -127,6 +127,7 @@ public class RestPriceRequestController {
 
 
         PriceRequest priceRequest = priceRequestService.getPriceRequest(priceRequestId);
+        priceRequestService.priceBelongToUserCheck(priceRequest);
 
         if (!priceRequest.getConfigMethod().getName().equals("PDF")) {
             throw new ProcessingException(Reason.PDF_REQUEST_ON_WRONG_CONFIG_METHOD);

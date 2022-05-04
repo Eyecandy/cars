@@ -33,7 +33,14 @@ public enum Reason {
     PRICE_REQUEST_DOES_NOT_BELONG_TO_USER("PriceRequest %s", "s11"),
 
 
-    PDF_REQUEST_ON_WRONG_CONFIG_METHOD("Request file, but configMethod is not PDF", "s12");
+    PDF_REQUEST_ON_WRONG_CONFIG_METHOD("Request file, but configMethod is not PDF", "s12"),
+
+    PRICE_REQUEST_ORDER_DOES_NOT_EXIST("Can not find priceRequestOrder %s", "s13"),
+    PRICE_REQUEST__ORDER_DOES_NOT_BELONG_TO_USER("PriceRequestOrder %s", "s14"),
+
+
+    DEADLINE_LINE_PASSED("Deadline passed for %s", "s15");
+
 
 
     private final String message;

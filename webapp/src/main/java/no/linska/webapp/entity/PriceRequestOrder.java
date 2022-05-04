@@ -32,4 +32,6 @@ public class PriceRequestOrder {
 
     private boolean answered = false;
 
+    private String offerFilePath;
+
 }

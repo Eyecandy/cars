@@ -2,6 +2,7 @@ package no.linska.webapp.service;
 
 import no.linska.webapp.entity.*;
 import no.linska.webapp.exception.DataException;
+import no.linska.webapp.exception.reason.ProcessingException;
 import no.linska.webapp.exception.reason.Reason;
 import no.linska.webapp.mailsender.service.EmailServiceImpl;
 import no.linska.webapp.repository.CarBrandRepository;
@@ -80,6 +81,18 @@ public class PriceRequestOrderServiceImpl implements PriceRequestOrderService {
         sendEmailsAsync(priceRequestOrders,priceRequest);
     }
 
+    public PriceRequestOrder getPriceRequestOrder(Long priceRequestOrderId) {
+        Optional<PriceRequestOrder> priceRequestOrder = priceRequestOrderRepository.findById(priceRequestOrderId);
+        if (priceRequestOrder.isEmpty()) {
+            String message = "priceRequestOrderId: " + priceRequestOrder + " doesn't exist";
+            throw new ProcessingException(Reason.PRICE_REQUEST_ORDER_DOES_NOT_EXIST,message);
+        }
+
+        priceBelongToUserCheck(priceRequestOrder.get());
+        return priceRequestOrder.get();
+
+    }
+
 
 
     @Async
@@ -90,7 +103,17 @@ public class PriceRequestOrderServiceImpl implements PriceRequestOrderService {
 
 
 
+    private void priceBelongToUserCheck(PriceRequestOrder priceRequestOrder) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findByEmail(auth.getName());
+        if (user.getId() != priceRequestOrder.getSeller().getUser().getId()) {
 
+            String msg = String.format("PriceRequestOrder doesn't belong to user. user id: %s priceRequest id: %s", user.getId(), priceRequestOrder.getId());
+            throw new ProcessingException(Reason.PRICE_REQUEST_DOES_NOT_BELONG_TO_USER, msg);
+        }
+
+
+    }
 
     private CarBrand fetchCarBrand(Integer carBrandId) {
 

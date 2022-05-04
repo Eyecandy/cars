@@ -150,7 +150,7 @@ public class AuthController {
             userService.register(user);
             emailService.sendMessage(emailHolder.getEmail(),"passord reset", text);
         }
-
+        storageService.createUserDir(user.getId().toString());
         return ResponseEntity.ok().body("");
     }
 

@@ -61,12 +61,12 @@ public class PriceRequestService {
         if (optionalPriceRequest.isEmpty()) {
             throw new ProcessingException(Reason.PRICE_REQUEST_DOES_NOT_EXIST, priceRequestId.toString());
         }
-        priceBelongToUserCheck(optionalPriceRequest.get());
+
 
        return optionalPriceRequest.get();
     }
 
-    private void priceBelongToUserCheck(PriceRequest priceRequest) {
+    public void priceBelongToUserCheck(PriceRequest priceRequest) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findByEmail(auth.getName());
         if (user.getId() != priceRequest.getUser().getId()) {
