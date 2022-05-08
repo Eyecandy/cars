@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @EnableAsync
@@ -39,6 +40,18 @@ public class PriceRequestOrderServiceImpl implements PriceRequestOrderService {
 
     @Autowired
     PriceRequestRepository priceRequestRepository;
+
+    Comparator<PriceRequestOrder> priceRequestOrderComparator = (o1, o2) -> {
+        if (o1.getTotalPrice() > o2.getTotalPrice()) {
+            return 1;
+        }
+        else if (o1.getTotalPrice() < o2.getTotalPrice()) {
+            return - 1;
+        }
+        else {
+            return 0;
+        }
+    };
 
     @Override
     public List<PriceRequestOrder> getOrdersBelongingToSellerUser() {
@@ -93,6 +106,23 @@ public class PriceRequestOrderServiceImpl implements PriceRequestOrderService {
 
     }
 
+    public List<PriceRequestOrder> getPriceRequestOrdersBelongingTo(Long priceRequestId) {
+        var priceRequestOrders = priceRequestOrderRepository.findPriceOrderRequestOnPriceRequestId(priceRequestId);
+        if (priceRequestOrders.isEmpty()) {
+            throw new ProcessingException(Reason.NO_PRICE_REQUEST_ORDERS_ON_REQUEST,priceRequestId.toString());
+        }
+        return priceRequestOrders;
+
+    }
+
+    @Override
+    public List<PriceRequestOrder> getHighestAndLowest(List<PriceRequestOrder> priceRequestOrderList) {
+
+        priceRequestOrderList.sort(priceRequestOrderComparator);
+        return priceRequestOrderList;
+
+    }
+
 
 
     @Async
@@ -143,5 +173,29 @@ public class PriceRequestOrderServiceImpl implements PriceRequestOrderService {
         }
         return sellersOptional.get();
     }
+
+    private PriceRequestOrder getHighestPriceOrder(PriceRequestOrder priceRequestOrder1, PriceRequestOrder priceRequestOrder2) {
+        if (priceRequestOrder1.getTotalPrice() > priceRequestOrder2.getTotalPrice()) {
+            return priceRequestOrder1;
+        }
+        return priceRequestOrder2;
+    }
+
+    private PriceRequestOrder getLowestPriceOrder(PriceRequestOrder priceRequestOrder1, PriceRequestOrder priceRequestOrder2) {
+        if (priceRequestOrder1.getTotalPrice() < priceRequestOrder2.getTotalPrice()) {
+            return priceRequestOrder1;
+        }
+        return priceRequestOrder2;
+    }
+
+    public List<PriceRequestOrder> getOnlyAnsweredPriceRequestOrders(List<PriceRequestOrder> priceRequestOrderList) {
+        return priceRequestOrderList.stream().filter(PriceRequestOrder::isAnswered).collect(Collectors.toList());
+    }
+
+
+
+
+
+
 
 }

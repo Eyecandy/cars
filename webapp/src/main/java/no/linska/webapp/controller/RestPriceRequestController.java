@@ -2,6 +2,7 @@ package no.linska.webapp.controller;
 
 
 import no.linska.webapp.dto.PriceRequestDto;
+import no.linska.webapp.dto.PriceRequestStatsDto;
 import no.linska.webapp.entity.*;
 import no.linska.webapp.exception.reason.ProcessingException;
 import no.linska.webapp.exception.reason.Reason;
@@ -19,9 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 @RestController()
@@ -52,16 +51,14 @@ public class RestPriceRequestController {
 
 
 
-    SimpleDateFormat DateFor = new SimpleDateFormat("dd-MM-yyyy");
-    SimpleDateFormat TimeFor = new SimpleDateFormat("hh:mm");
-    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
 
 
     @GetMapping("/list_price_request")
     public ResponseEntity<?> getPriceRequest() {
         List<PriceRequestDto> priceRequestDtos = new ArrayList<>();
         for (PriceRequest priceRequest: priceRequestService.getUserPriceRequest()) {
-            priceRequestDtos.add(convertPriceRequest(priceRequest));
+            priceRequestDtos.add(priceRequestService.convertPriceRequest(priceRequest));
         }
         return ResponseEntity.ok().body(priceRequestDtos);
     }
@@ -141,32 +138,56 @@ public class RestPriceRequestController {
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(resource);
 
+    }
 
+
+    @GetMapping("/getOfferFile/{priceRequestOrderId}")
+    public ResponseEntity<?> getFileFromPriceRequestOrder(@PathVariable  Long priceRequestId) throws IOException {
+
+
+
+        PriceRequest priceRequest = priceRequestService.getPriceRequest(priceRequestId);
+        priceRequestService.priceBelongToUserCheck(priceRequest);
+
+        if (!priceRequest.getConfigMethod().getName().equals("PDF")) {
+            throw new ProcessingException(Reason.PDF_REQUEST_ON_WRONG_CONFIG_METHOD);
+        }
+
+        File file =  storageService.readFile(priceRequest.getConfiguration());
+        ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(file.toPath()));
+        return ResponseEntity.ok()
+
+                .contentLength(file.length())
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(resource);
 
     }
 
-    private PriceRequestDto convertPriceRequest(PriceRequest priceRequest) {
-        PriceRequestDto priceRequestDto = new PriceRequestDto();
-        priceRequestDto.setCounty(priceRequest.getCounty());
-
-        Calendar c = Calendar.getInstance();
-        String stringDate = DateFor.format(priceRequest.getDeadline());
-        String stringTime = TimeFor.format(priceRequest.getDeadline());
-        priceRequestDto.setDeadlineDatePretty(stringDate);
-        priceRequestDto.setDeadlineTimePretty(stringTime);
-        priceRequestDto.setDeadline(priceRequest.getDeadline());
-        priceRequestDto.setTireOption(priceRequest.getTireOption());
-        priceRequestDto.setConfigMethod(priceRequest.getConfigMethod());
-        priceRequestDto.setLink(priceRequest.getConfiguration());
-        priceRequestDto.setId(priceRequest.getId());
-        priceRequestDto.setDeadLineReached(priceRequest.getDeadline().before(c.getTime()));
-        priceRequestDto.setCarBrandName(priceRequest.getCarBrand().getName());
-        priceRequestDto.setNumRetailersAnswered(priceRequest.getNumRetailersAnswered());
-        priceRequestDto.setNumRetailersSentTo(priceRequest.getNumRetailersSentTo());
-        priceRequestDto.setConfiguration(priceRequest.getConfiguration());
 
 
-        return priceRequestDto;
+
+    @GetMapping("/price-request-stats/{priceRequestId}")
+    public ResponseEntity<?> getBestPriceAndStats(@PathVariable  Long priceRequestId) {
+        ;
+        PriceRequest priceRequest = priceRequestService.getPriceRequest(priceRequestId);
+        priceRequestService.priceBelongToUserCheck(priceRequest);
+
+        var priceRequestOrderList = priceRequestOrderService.getPriceRequestOrdersBelongingTo(priceRequestId);
+
+        var highestAndLowestOffer = priceRequestOrderService.getHighestAndLowest(priceRequestOrderList);
+        if (highestAndLowestOffer.isEmpty()) {
+            throw new ProcessingException(Reason.NO_ANSWER_PRICE_REQUEST_ORDERS_ON_REQUEST,priceRequestId.toString());
+        }
+        PriceRequestStatsDto priceRequestStatsDto = new PriceRequestStatsDto();
+        priceRequestStatsDto.setPriceRequestOrderId(highestAndLowestOffer.get(0).getId());
+        priceRequestStatsDto.setHighestOffer(highestAndLowestOffer.get(0).getTotalPrice());
+        priceRequestStatsDto.setLowestOffer(highestAndLowestOffer.get(highestAndLowestOffer.size()-1).getTotalPrice());
+
+
+        return ResponseEntity.ok(priceRequestStatsDto);
+
     }
+
+
 
 }

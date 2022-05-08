@@ -14,4 +14,5 @@ public class FileWatcherProperty {
     public String getDirPath() {
         return dirPath;
     }
+
 }

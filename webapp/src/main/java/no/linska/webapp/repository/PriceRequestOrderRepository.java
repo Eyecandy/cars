@@ -18,6 +18,6 @@ public interface PriceRequestOrderRepository  extends CrudRepository<PriceReques
     @Query(value = "select * from price_request_order\n" +
             "where price_request_id = ?"
             , nativeQuery = true)
-    List<PriceRequestOrder> findPriceRequestId(Long id);
+    List<PriceRequestOrder> findPriceOrderRequestOnPriceRequestId(Long id);
 
 }

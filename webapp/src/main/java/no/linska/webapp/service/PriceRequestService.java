@@ -1,6 +1,7 @@
 package no.linska.webapp.service;
 
 
+import no.linska.webapp.dto.PriceRequestDto;
 import no.linska.webapp.entity.PriceRequest;
 import no.linska.webapp.entity.User;
 import no.linska.webapp.exception.reason.ProcessingException;
@@ -12,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
@@ -31,7 +33,9 @@ public class PriceRequestService {
 
 
 
-
+    SimpleDateFormat DateFor = new SimpleDateFormat("dd-MM-yyyy");
+    SimpleDateFormat TimeFor = new SimpleDateFormat("HH:mm");
+    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
 
 
@@ -64,6 +68,30 @@ public class PriceRequestService {
 
 
        return optionalPriceRequest.get();
+    }
+
+    public PriceRequestDto convertPriceRequest(PriceRequest priceRequest) {
+        PriceRequestDto priceRequestDto = new PriceRequestDto();
+        priceRequestDto.setCounty(priceRequest.getCounty());
+
+        Calendar c = Calendar.getInstance();
+        String stringDate = DateFor.format(priceRequest.getDeadline());
+        String stringTime = TimeFor.format(priceRequest.getDeadline());
+        priceRequestDto.setDeadlineDatePretty(stringDate);
+        priceRequestDto.setDeadlineTimePretty(stringTime);
+        priceRequestDto.setDeadline(priceRequest.getDeadline());
+        priceRequestDto.setTireOption(priceRequest.getTireOption());
+        priceRequestDto.setConfigMethod(priceRequest.getConfigMethod());
+        priceRequestDto.setLink(priceRequest.getConfiguration());
+        priceRequestDto.setId(priceRequest.getId());
+        priceRequestDto.setDeadLineReached(priceRequest.getDeadline().before(c.getTime()));
+        priceRequestDto.setCarBrandName(priceRequest.getCarBrand().getName());
+        priceRequestDto.setNumRetailersAnswered(priceRequest.getNumRetailersAnswered());
+        priceRequestDto.setNumRetailersSentTo(priceRequest.getNumRetailersSentTo());
+        priceRequestDto.setConfiguration(priceRequest.getConfiguration());
+
+
+        return priceRequestDto;
     }
 
     public void priceBelongToUserCheck(PriceRequest priceRequest) {

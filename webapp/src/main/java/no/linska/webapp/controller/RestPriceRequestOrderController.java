@@ -6,6 +6,7 @@ import no.linska.webapp.entity.PriceRequest;
 import no.linska.webapp.entity.PriceRequestOrder;
 import no.linska.webapp.exception.reason.ProcessingException;
 import no.linska.webapp.exception.reason.Reason;
+import no.linska.webapp.repository.PriceRequestOrderRepository;
 import no.linska.webapp.repository.PriceRequestRepository;
 import no.linska.webapp.service.PriceRequestOrderService;
 import no.linska.webapp.service.StorageService;
@@ -36,6 +37,9 @@ public class RestPriceRequestOrderController {
 
     @Autowired
     StorageService storageService;
+
+    @Autowired
+    PriceRequestOrderRepository priceRequestOrderRepository;
 
 
 
@@ -92,6 +96,8 @@ public class RestPriceRequestOrderController {
 
         Path storedPath = storageService.store(multipartFile);
         priceRequestOrder.setOfferFilePath(storedPath.toString());
+
+        priceRequestOrderRepository.save(priceRequestOrder);
 
         return ResponseEntity.status(201).body("Vi har lastet inn ditt tilbud");
 

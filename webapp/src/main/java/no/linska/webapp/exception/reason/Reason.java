@@ -39,7 +39,11 @@ public enum Reason {
     PRICE_REQUEST__ORDER_DOES_NOT_BELONG_TO_USER("PriceRequestOrder %s", "s14"),
 
 
-    DEADLINE_LINE_PASSED("Deadline passed for %s", "s15");
+    DEADLINE_LINE_PASSED("Deadline passed for %s", "s15"),
+
+
+    NO_ANSWER_PRICE_REQUEST_ORDERS_ON_REQUEST("No offers where made by sellers on request:  %s", "s16"),
+    NO_PRICE_REQUEST_ORDERS_ON_REQUEST("PriceRequestOrders are empty for priceRequest:  %s", "s17");
 
 
 
