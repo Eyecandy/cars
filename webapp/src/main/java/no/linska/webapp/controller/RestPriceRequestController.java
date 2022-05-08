@@ -141,19 +141,18 @@ public class RestPriceRequestController {
     }
 
 
-    @GetMapping("/getOfferFile/{priceRequestOrderId}")
-    public ResponseEntity<?> getFileFromPriceRequestOrder(@PathVariable  Long priceRequestId) throws IOException {
+    @GetMapping("/lowest-offer-file/{priceRequestId}")
+    public ResponseEntity<?> getBestOfferFile(@PathVariable  Long priceRequestId) throws IOException {
 
 
 
         PriceRequest priceRequest = priceRequestService.getPriceRequest(priceRequestId);
         priceRequestService.priceBelongToUserCheck(priceRequest);
 
-        if (!priceRequest.getConfigMethod().getName().equals("PDF")) {
-            throw new ProcessingException(Reason.PDF_REQUEST_ON_WRONG_CONFIG_METHOD);
-        }
+        var filePathOfLowestOffer = priceRequestOrderService.getFilePathOfBestOffer(priceRequest);
 
-        File file =  storageService.readFile(priceRequest.getConfiguration());
+
+        File file =  storageService.readFile(filePathOfLowestOffer);
         ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(file.toPath()));
         return ResponseEntity.ok()
 

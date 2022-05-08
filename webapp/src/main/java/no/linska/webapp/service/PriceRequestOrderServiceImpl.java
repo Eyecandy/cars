@@ -123,6 +123,24 @@ public class PriceRequestOrderServiceImpl implements PriceRequestOrderService {
 
     }
 
+    public String getFilePathOfBestOffer(PriceRequest priceRequest) {
+        var priceReqeustOrder = getLowestPriceRequestOrder(priceRequest);
+        return priceReqeustOrder.getOfferFilePath();
+    }
+
+    public PriceRequestOrder getLowestPriceRequestOrder(PriceRequest priceRequest) {
+        List<PriceRequestOrder> priceRequestOrders = priceRequestOrderRepository.findLowestPriceRequestOrders(priceRequest.getId());
+        if (priceRequestOrders.isEmpty()) {
+            throw new ProcessingException(Reason.NO_PRICE_REQUEST_ORDERS_ON_REQUEST, priceRequest.getId().toString());
+        }
+        if (priceRequestOrders.size() != 1) {
+            //TODO deal with it
+            System.out.println("EDGE CASE");
+        }
+
+        return priceRequestOrders.get(0);
+    }
+
 
 
     @Async
