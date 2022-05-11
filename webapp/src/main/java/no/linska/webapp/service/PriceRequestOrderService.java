@@ -14,6 +14,8 @@ public interface PriceRequestOrderService {
     List<PriceRequestOrder> getPriceRequestOrdersBelongingTo(Long priceRequestId);
     String getFilePathOfBestOffer(PriceRequest priceRequest);
     PriceRequestOrder getLowestPriceRequestOrder(PriceRequest priceRequest);
+    void save(PriceRequestOrder priceRequestOrder);
+
 
 
 

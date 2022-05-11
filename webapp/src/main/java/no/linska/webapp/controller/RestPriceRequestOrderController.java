@@ -83,8 +83,7 @@ public class RestPriceRequestOrderController {
         PriceRequestOrder priceRequestOrder =  priceRequestOrderService.getPriceRequestOrder(offerDto.getPriceRequestOrderId());
         PriceRequest priceRequest = priceRequestOrder.getPriceRequest();
         Calendar c = Calendar.getInstance();
-        System.out.println(priceRequest.getDeadline());
-        System.out.println(c.getTime());
+
         if (priceRequest.getDeadline().before(c.getTime())) {
             throw new ProcessingException(Reason.DEADLINE_LINE_PASSED,"deadline passed for :" + priceRequest.getId());
         }
@@ -98,6 +97,7 @@ public class RestPriceRequestOrderController {
         priceRequestOrder.setOfferFilePath(storedPath.toString());
 
         priceRequestOrderRepository.save(priceRequestOrder);
+
 
         return ResponseEntity.status(201).body("Vi har lastet inn ditt tilbud");
 

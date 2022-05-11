@@ -141,6 +141,10 @@ public class PriceRequestOrderServiceImpl implements PriceRequestOrderService {
         return priceRequestOrders.get(0);
     }
 
+    @Override
+    public void save(PriceRequestOrder priceRequestOrder) {
+        priceRequestOrderRepository.save(priceRequestOrder);
+    }
 
 
     @Async

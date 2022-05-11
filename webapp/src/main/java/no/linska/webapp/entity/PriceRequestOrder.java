@@ -34,4 +34,6 @@ public class PriceRequestOrder {
 
     private String offerFilePath;
 
+    private boolean customerAcceptedThisOffer = false;
+
 }

@@ -1,6 +1,7 @@
 package no.linska.webapp.controller;
 
 
+import no.linska.webapp.dto.OfferAcceptedDto;
 import no.linska.webapp.dto.PriceRequestDto;
 import no.linska.webapp.dto.PriceRequestStatsDto;
 import no.linska.webapp.entity.*;
@@ -16,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -138,6 +140,31 @@ public class RestPriceRequestController {
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(resource);
 
+    }
+
+
+    @PostMapping("/customer-accept-offer")
+    public ResponseEntity<?> contactCustomerOnPriceRequest(@RequestBody @Valid OfferAcceptedDto offerAcceptedDto) throws IOException, InterruptedException {
+
+        PriceRequest priceRequest = priceRequestService.getPriceRequest(offerAcceptedDto.getPriceRequestId());
+        priceRequestService.priceBelongToUserCheck(priceRequest);
+        if (priceRequest.isCustomerHasAcceptedOffer()) {
+            return ResponseEntity.badRequest().body("Customer had already accepted offer");
+        }
+
+        if (!priceRequestService.isDeadlineReached(priceRequest)) {
+            return ResponseEntity.badRequest().body("Deadline not reached yet");
+        }
+
+
+
+        PriceRequestOrder priceRequestOrder = priceRequestOrderService.getLowestPriceRequestOrder(priceRequest);
+        priceRequestOrder.setCustomerAcceptedThisOffer(true);
+        priceRequest.setCustomerHasAcceptedOffer(true);
+        priceRequestService.save(priceRequest);
+        priceRequestOrderService.save(priceRequestOrder);
+
+        return ResponseEntity.ok().body("Success");
     }
 
 

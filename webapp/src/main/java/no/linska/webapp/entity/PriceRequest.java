@@ -51,4 +51,8 @@ public class PriceRequest {
     private Integer numRetailersSentTo;
     @Column(name = "num_retailers_answered")
     private Integer numRetailersAnswered;
+
+
+    private boolean customerHasAcceptedOffer = false;
+
 }

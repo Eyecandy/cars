@@ -36,14 +36,15 @@ public class PriceRequestService {
     SimpleDateFormat DateFor = new SimpleDateFormat("dd-MM-yyyy");
     SimpleDateFormat TimeFor = new SimpleDateFormat("HH:mm");
     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    Calendar calendar = Calendar.getInstance();
 
 
 
     public void save(PriceRequest priceRequest) throws InterruptedException {
 
-        Calendar c = Calendar.getInstance(); // starts with today's date and time
-        c.add(Calendar.HOUR, 48);  // advances day by 2
-        priceRequest.setDeadline(c.getTime());
+
+        calendar.add(Calendar.HOUR, 48);  // advances day by 2
+        priceRequest.setDeadline(calendar.getTime());
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByEmail(auth.getName());
         priceRequest.setUser(user);
@@ -104,6 +105,10 @@ public class PriceRequestService {
         }
 
 
+    }
+
+    public boolean isDeadlineReached(PriceRequest priceRequest) {
+        return priceRequest.getDeadline().after(calendar.getTime());
     }
 
 
