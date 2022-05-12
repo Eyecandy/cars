@@ -1,7 +1,6 @@
 package no.linska.webapp.entity;
 
 import lombok.Data;
-import no.linska.webapp.validator.password.NoWhiteSpaceAllowed;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -42,6 +41,8 @@ public class User implements Serializable {
     @NotBlank(message = "Passordet kan ikke være tomt")
 
     private String password;
+
+    private String phoneNumber;
 
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)

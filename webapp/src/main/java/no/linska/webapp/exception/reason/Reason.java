@@ -43,7 +43,9 @@ public enum Reason {
 
 
     NO_ANSWER_PRICE_REQUEST_ORDERS_ON_REQUEST("No offers where made by sellers on request:  %s", "s16"),
-    NO_PRICE_REQUEST_ORDERS_ON_REQUEST("PriceRequestOrders are empty for priceRequest:  %s", "s17");
+    NO_PRICE_REQUEST_ORDERS_ON_REQUEST("PriceRequestOrders are empty for priceRequest:  %s", "s17"),
+
+    NO_SELLER_WITH_THAT_USER_ID("No seller with user id:  %s", "s18");
 
 
 
