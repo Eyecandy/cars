@@ -36,17 +36,19 @@ public class PriceRequestService {
     SimpleDateFormat DateFor = new SimpleDateFormat("dd-MM-yyyy");
     SimpleDateFormat TimeFor = new SimpleDateFormat("HH:mm");
     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    SimpleDateFormat formatter2 = new SimpleDateFormat("mmddssMM");
     Calendar calendar = Calendar.getInstance();
 
 
 
     public void save(PriceRequest priceRequest) throws InterruptedException {
 
-
+        int arbitraryStartOrderNumber = 2437;
         calendar.add(Calendar.HOUR, 48);  // advances day by 2
         priceRequest.setDeadline(calendar.getTime());
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByEmail(auth.getName());
+        priceRequest.setOrderNumber(formatter2.format(calendar.getTime()) + "-" +(user.getId() +  arbitraryStartOrderNumber ));
         priceRequest.setUser(user);
         priceRequestRepository.save(priceRequest);
 
@@ -90,6 +92,7 @@ public class PriceRequestService {
         priceRequestDto.setNumRetailersAnswered(priceRequest.getNumRetailersAnswered());
         priceRequestDto.setNumRetailersSentTo(priceRequest.getNumRetailersSentTo());
         priceRequestDto.setConfiguration(priceRequest.getConfiguration());
+        priceRequestDto.setOrderNumber(priceRequest.getOrderNumber());
 
 
         return priceRequestDto;

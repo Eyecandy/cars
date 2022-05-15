@@ -15,6 +15,10 @@ public class PriceRequest {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
+    @Column(unique = true)
+    @NotNull
+    private String orderNumber;
+
     @ManyToOne
     @JsonIgnore
     private User user;

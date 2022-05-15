@@ -45,6 +45,8 @@ public class PriceRequestDto {
 
     private String configuration;
 
+    private String orderNumber;
+
 
 
 
