@@ -4,13 +4,14 @@ package no.linska.webapp.controller;
 import no.linska.webapp.dto.EmailDto;
 import no.linska.webapp.dto.LoginRequestDto;
 import no.linska.webapp.dto.RegistrationRequestDto;
+import no.linska.webapp.entity.Buyer;
 import no.linska.webapp.entity.User;
 import no.linska.webapp.entity.UserRole;
 import no.linska.webapp.mailsender.service.EmailService;
-import no.linska.webapp.repository.UserRoleRepository;
 import no.linska.webapp.responses.JwtResponse;
 import no.linska.webapp.responses.MessageResponse;
 import no.linska.webapp.security.jwt.JwtUtils;
+import no.linska.webapp.service.BuyerService;
 import no.linska.webapp.service.StorageService;
 import no.linska.webapp.service.UserDetailsImpl;
 import no.linska.webapp.service.UserService;
@@ -20,7 +21,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,14 +35,14 @@ public class AuthController {
     AuthenticationManager authenticationManager;
     @Autowired
     UserService userService;
-    @Autowired
-    UserRoleRepository userRoleRepository;
-    @Autowired
-    PasswordEncoder encoder;
+
     @Autowired
     StorageService storageService;
     @Autowired
     JwtUtils jwtUtils;
+
+    @Autowired
+    BuyerService buyerService;
 
     @Autowired
     EmailService emailService;
@@ -102,6 +102,11 @@ public class AuthController {
         user.setUserRole(userRole);
 
         userService.register(user);
+        Buyer buyer = new Buyer();
+        buyer.setUser(user);
+        buyerService.save(buyer);
+
+
         storageService.createUserDir(user.getId().toString());
 
         return ResponseEntity.ok().body(new MessageResponse("Din e-post: " + user.getEmail() +" er registrert"));
