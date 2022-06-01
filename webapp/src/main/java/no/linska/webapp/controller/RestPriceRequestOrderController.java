@@ -1,13 +1,16 @@
 package no.linska.webapp.controller;
 
 
+import no.linska.webapp.dto.BuyerUserDto;
 import no.linska.webapp.dto.OfferDto;
 import no.linska.webapp.entity.PriceRequest;
 import no.linska.webapp.entity.PriceRequestOrder;
+import no.linska.webapp.entity.User;
 import no.linska.webapp.exception.reason.ProcessingException;
 import no.linska.webapp.exception.reason.Reason;
 import no.linska.webapp.repository.PriceRequestOrderRepository;
 import no.linska.webapp.repository.PriceRequestRepository;
+import no.linska.webapp.service.BuyerService;
 import no.linska.webapp.service.PriceRequestOrderService;
 import no.linska.webapp.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,12 +44,33 @@ public class RestPriceRequestOrderController {
     @Autowired
     PriceRequestOrderRepository priceRequestOrderRepository;
 
+    @Autowired
+    BuyerService buyerService;
+
 
 
     @GetMapping("/listpricerequestorders")
     public ResponseEntity<?> getSellerPriceRequestOrder() {
         List<PriceRequestOrder> priceRequestOrderList = priceRequestOrderService.getOrdersBelongingToSellerUser();
         return ResponseEntity.ok().body(priceRequestOrderList);
+    }
+
+    @GetMapping("/getbuyerinfo/{priceRequestOrderId}")
+    public ResponseEntity<?> getBuyerInfo(@PathVariable Long priceRequestOrderId) {
+        PriceRequestOrder priceRequestOrder = priceRequestOrderService.getPriceRequestOrder(priceRequestOrderId);
+        PriceRequest priceRequest = priceRequestOrder.getPriceRequest();
+        User user = priceRequest.getUser();
+        var buyer = buyerService.getBuerByUserId(user.getId());
+        var buyerUserDto = new BuyerUserDto();
+        buyerUserDto.setEmail(user.getEmail());
+        buyerUserDto.setFirstName(user.getFirstName());
+        buyerUserDto.setLastName(user.getLastName());
+        buyerUserDto.setPhoneNumber(user.getPhoneNumber());
+        buyerUserDto.setCity(buyer.getCity());
+        buyerUserDto.setPostBox(buyer.getPostBox());
+        buyerUserDto.setStreetName(buyer.getStreetName());
+        buyerUserDto.setStreetNumber(buyer.getStreetNumber());
+        return ResponseEntity.ok().body(buyerUserDto);
     }
 
     @GetMapping("/getfile/{priceRequestOrderId}")
