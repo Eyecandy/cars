@@ -35,7 +35,6 @@ public class BuyerInfoController {
         user.setLastName(buyerUserDto.getLastName());
         user.setPhoneNumber(buyerUserDto.getPhoneNumber());
 
-        System.out.println("postBox: " + buyerUserDto.getPostBox());
         Buyer buyer = buyerService.getBuerByUserId(user.getId());
         buyer.setCity(buyerUserDto.getCity());
         buyer.setPostBox(buyerUserDto.getPostBox());
@@ -45,6 +44,23 @@ public class BuyerInfoController {
         buyerService.save(buyer);
 
         return ResponseEntity.ok().body("success");
+
+    }
+    @GetMapping("/get")
+    public ResponseEntity<?> get() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findByEmail(auth.getName());
+        var buyer = buyerService.getBuerByUserId(user.getId());
+        var buyerUserDto = new BuyerUserDto();
+        buyerUserDto.setEmail(user.getEmail());
+        buyerUserDto.setFirstName(user.getFirstName());
+        buyerUserDto.setLastName(user.getLastName());
+        buyerUserDto.setPhoneNumber(user.getPhoneNumber());
+        buyerUserDto.setCity(buyer.getCity());
+        buyerUserDto.setPostBox(buyer.getPostBox());
+        buyerUserDto.setStreetName(buyer.getStreetName());
+        buyerUserDto.setStreetNumber(buyer.getStreetNumber());
+        return ResponseEntity.ok().body(buyerUserDto);
 
     }
 
