@@ -47,7 +47,9 @@ public enum Reason {
 
     NO_SELLER_WITH_THAT_USER_ID("No seller with user id:  %s", "s18"),
 
-    NO_BUYER_WITH_THAT_USER_ID("No buyer with user id:  %s", "s19");
+    NO_BUYER_WITH_THAT_USER_ID("No buyer with user id:  %s", "s19"),
+
+    PRICE_REQUEST_FIELD_MISSING("PriceRequest id: %s missing field %s", "s20");
 
 
 

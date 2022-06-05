@@ -33,7 +33,6 @@ public class UserInfoController {
         System.out.println(user.getUserRole().getType());
         System.out.println(user.getUserRole().getType().equals("seller"));
         if (user.getUserRole().getType().equals("seller")) {
-            System.out.println("seller");
             Seller seller = sellerService.getSellerByUserId(user.getId());
             seller.getRetailer().getName();
             SellerUserDto sellerUserDto = new SellerUserDto();
@@ -46,9 +45,8 @@ public class UserInfoController {
 
         }
         else if (user.getUserRole().getType().equals("buyer")) {
-            System.out.println("buyer");
+
         }
-        System.out.println("end");
         return ResponseEntity.badRequest().body("bad request");
     }
 }

@@ -37,12 +37,12 @@ public class PriceRequestService {
     SimpleDateFormat TimeFor = new SimpleDateFormat("HH:mm");
     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     SimpleDateFormat formatter2 = new SimpleDateFormat("mmddssMM");
-    Calendar calendar = Calendar.getInstance();
 
 
 
-    public void save(PriceRequest priceRequest) throws InterruptedException {
 
+    public void createAndSave(PriceRequest priceRequest) throws InterruptedException {
+        Calendar calendar = Calendar.getInstance();
         int arbitraryStartOrderNumber = 2437;
         calendar.add(Calendar.HOUR, 48);  // advances day by 2
         priceRequest.setDeadline(calendar.getTime());
@@ -53,6 +53,10 @@ public class PriceRequestService {
         priceRequestRepository.save(priceRequest);
 
 
+    }
+
+    public void update(PriceRequest priceRequest) throws InterruptedException {
+        priceRequestRepository.save(priceRequest);
     }
 
 
@@ -111,7 +115,15 @@ public class PriceRequestService {
     }
 
     public boolean isDeadlineReached(PriceRequest priceRequest) {
-        return priceRequest.getDeadline().after(calendar.getTime());
+
+        if (priceRequest.getDeadline() == null) {
+            String msg = String.format("price Request %s missing field deadline", priceRequest.getId());
+            throw new ProcessingException(Reason.PRICE_REQUEST_FIELD_MISSING, msg);
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        var todayDate = calendar.getTime();
+        return todayDate.after(priceRequest.getDeadline());
     }
 
 

@@ -10,7 +10,7 @@ public class UserBuilder {
         User user = new User();
         user.setEmail(validEmail);
         user.setPassword(validPassword);
-        user.setMatchingPassword(validPassword);
+
         return user;
     }
 

@@ -111,7 +111,7 @@ public class RestPriceRequestController {
         priceRequest.setCounty(county);
         priceRequest.setTireOption(tireOption);
 
-        priceRequestService.save(priceRequest);
+        priceRequestService.createAndSave(priceRequest);
         priceRequestOrderService.createPriceRequestOrders(priceRequest);
 
 
@@ -161,7 +161,7 @@ public class RestPriceRequestController {
         PriceRequestOrder priceRequestOrder = priceRequestOrderService.getLowestPriceRequestOrder(priceRequest);
         priceRequestOrder.setCustomerAcceptedThisOffer(true);
         priceRequest.setCustomerHasAcceptedOffer(true);
-        priceRequestService.save(priceRequest);
+        priceRequestService.update(priceRequest);
         priceRequestOrderService.save(priceRequestOrder);
 
         return ResponseEntity.ok().body("Success");
@@ -170,7 +170,6 @@ public class RestPriceRequestController {
 
     @GetMapping("/lowest-offer-file/{priceRequestId}")
     public ResponseEntity<?> getBestOfferFile(@PathVariable  Long priceRequestId) throws IOException {
-
 
 
         PriceRequest priceRequest = priceRequestService.getPriceRequest(priceRequestId);
