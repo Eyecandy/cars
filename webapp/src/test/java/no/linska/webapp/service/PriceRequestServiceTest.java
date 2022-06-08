@@ -34,7 +34,6 @@ class PriceRequestServiceTest {
     void deadLineNotReached() {
         PriceRequest priceRequest = new PriceRequest();
         Calendar calendar = Calendar.getInstance();
-        int arbitraryStartOrderNumber = 2437;
         calendar.add(Calendar.HOUR, 48);  // advances day by 2
         priceRequest.setDeadline(calendar.getTime());
 
@@ -49,9 +48,7 @@ class PriceRequestServiceTest {
         priceRequest.setId(1L);
 
         ProcessingException exception = Assertions.assertThrows(ProcessingException.class,
-                () -> {priceRequestService.isDeadlineReached(priceRequest);}  ) ;
+                () -> {priceRequestService.isDeadlineReached(priceRequest);} ) ;
         Assertions.assertEquals("s20", exception.getReason().getCode());
-
-
     }
 }

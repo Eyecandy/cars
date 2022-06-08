@@ -87,7 +87,7 @@ public class AuthController {
 
         if (user != null) {
             return ResponseEntity
-                    .badRequest()
+                    .status(409)
                     .body(new MessageResponse("Error: Email is already in use!"));
         }
         user = new User();
