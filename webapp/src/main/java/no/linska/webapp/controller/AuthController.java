@@ -9,7 +9,7 @@ import no.linska.webapp.entity.User;
 import no.linska.webapp.entity.UserRole;
 import no.linska.webapp.mailsender.service.EmailService;
 import no.linska.webapp.responses.JwtResponse;
-import no.linska.webapp.responses.MessageResponse;
+import no.linska.webapp.responses.HttpCodeDescription;
 import no.linska.webapp.security.jwt.JwtUtils;
 import no.linska.webapp.service.BuyerService;
 import no.linska.webapp.service.StorageService;
@@ -86,9 +86,10 @@ public class AuthController {
         User user = userService.findByEmail(userRegistrationDto.getEmail());
 
         if (user != null) {
+            System.out.println(HttpCodeDescription.CONFLICT_EMAIL_EXISTS.getCodeResponse());
             return ResponseEntity
-                    .status(409)
-                    .body(new MessageResponse("Error: Email is already in use!"));
+                    .status(HttpCodeDescription.CONFLICT_EMAIL_EXISTS.getHttpCode())
+                    .body(HttpCodeDescription.CONFLICT_EMAIL_EXISTS.getCodeResponse());
         }
         user = new User();
         String email = userRegistrationDto.getEmail();
@@ -109,7 +110,9 @@ public class AuthController {
 
         storageService.createUserDir(user.getId().toString());
 
-        return ResponseEntity.ok().body(new MessageResponse("Din e-post: " + user.getEmail() +" er registrert"));
+        return ResponseEntity
+                .status(HttpCodeDescription.CREATED.getHttpCode())
+                .body(HttpCodeDescription.CREATED.getCodeResponse());
     }
 
 
@@ -124,8 +127,8 @@ public class AuthController {
 
         if (user != null) {
             return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Email is already in use!"));
+                    .status(HttpCodeDescription.CONFLICT_EMAIL_EXISTS.getHttpCode())
+                    .body(HttpCodeDescription.CONFLICT_EMAIL_EXISTS.getCodeResponse());
         }
         user = new User();
         String email = userRegistrationDto.getEmail();
@@ -141,7 +144,9 @@ public class AuthController {
         userService.register(user);
         storageService.createUserDir(user.getId().toString());
 
-        return ResponseEntity.ok().body(new MessageResponse("Din e-post: " + user.getEmail() +" er registrert"));
+        return ResponseEntity
+                .status(HttpCodeDescription.CREATED.getHttpCode())
+                .body(HttpCodeDescription.CREATED.getCodeResponse());
     }
 
     @PostMapping("/resetpassword")
@@ -156,7 +161,7 @@ public class AuthController {
             emailService.sendMessage(emailHolder.getEmail(),"passord reset", text);
         }
         storageService.createUserDir(user.getId().toString());
-        return ResponseEntity.ok().body("");
+        return ResponseEntity.ok().body(HttpCodeDescription.SUCCESS.getCodeResponse());
     }
 
 }

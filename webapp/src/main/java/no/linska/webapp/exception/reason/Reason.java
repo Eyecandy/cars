@@ -4,15 +4,6 @@ package no.linska.webapp.exception.reason;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-/**
- * Reason code contract
- *
- * @message Base message for the reason. Can be replaced by providing a message in exception
- * @code Every subcategory like Agreement has own prefix (starting from 001)
- * Then every reason in subcategory has own code (starting from 0001)
- * Example: AGREEMENT_ACTIVATION_ERROR should have id 0010001
- * and BANK_NOT_EXIST in next subcategory should have code 0020001
- */
 @Getter
 @RequiredArgsConstructor
 public enum Reason {
