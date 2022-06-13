@@ -7,9 +7,9 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum HttpCodeDescription {
-    SUCCESS("SUCCESS",new CodeResponse("su1"),200),
-    CREATED("CREATED",new CodeResponse("ca1"), 201),
-    CONFLICT_EMAIL_EXISTS("CONFLICT: email exists", new CodeResponse("co2"),409);
+    SUCCESS("SUCCESS",new CodeResponse("success"),200),
+    CREATED("CREATED",new CodeResponse("created"), 201),
+    CONFLICT_EMAIL_EXISTS("CONFLICT: email exists", new CodeResponse("reg_conflict"),409);
 
 
     private final String description;

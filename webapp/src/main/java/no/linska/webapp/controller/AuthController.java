@@ -8,6 +8,7 @@ import no.linska.webapp.entity.Buyer;
 import no.linska.webapp.entity.User;
 import no.linska.webapp.entity.UserRole;
 import no.linska.webapp.mailsender.service.EmailService;
+import no.linska.webapp.responses.CodeResponse;
 import no.linska.webapp.responses.JwtResponse;
 import no.linska.webapp.responses.HttpCodeDescription;
 import no.linska.webapp.security.jwt.JwtUtils;
@@ -25,6 +26,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -80,13 +82,19 @@ public class AuthController {
     public ResponseEntity<?> registerUser(@RequestBody @Valid  RegistrationRequestDto userRegistrationDto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            System.out.println(bindingResult.getAllErrors());
+            var errorMessageList = new ArrayList<String>();
+            for (var errors:bindingResult.getAllErrors()) {
+                errorMessageList.add(errors.getDefaultMessage());
+            }
+            return ResponseEntity
+                    .badRequest()
+                    .body(new CodeResponse("field_error",errorMessageList));
+
         }
 
         User user = userService.findByEmail(userRegistrationDto.getEmail());
 
         if (user != null) {
-            System.out.println(HttpCodeDescription.CONFLICT_EMAIL_EXISTS.getCodeResponse());
             return ResponseEntity
                     .status(HttpCodeDescription.CONFLICT_EMAIL_EXISTS.getHttpCode())
                     .body(HttpCodeDescription.CONFLICT_EMAIL_EXISTS.getCodeResponse());
@@ -120,7 +128,14 @@ public class AuthController {
     public ResponseEntity<?> registerUserSeller(@RequestBody @Valid  RegistrationRequestDto userRegistrationDto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            System.out.println(bindingResult.getAllErrors());
+            var errorMessageList = new ArrayList<String>();
+            for (var errors:bindingResult.getAllErrors()) {
+                errorMessageList.add(errors.getDefaultMessage());
+            }
+            return ResponseEntity
+                    .badRequest()
+                    .body(new CodeResponse("field_error",errorMessageList));
+
         }
 
         User user = userService.findByEmail(userRegistrationDto.getEmail());

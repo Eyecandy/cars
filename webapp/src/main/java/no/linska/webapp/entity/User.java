@@ -33,12 +33,12 @@ public class User implements Serializable {
     private String lastName;
 
     @Column(unique = true)
-    @NotBlank(message = "Epost adresse kan ikke være tom")
+    @NotBlank(message = "email_is_empty")
     private String email;
 
     @Column(name = "password")
-    @Size(min = 8, max = 60, message = "Passordet må minst ha 8 tegn")
-    @NotBlank(message = "Passordet kan ikke være tomt")
+    @Size(min = 8, max = 60, message = "password_must_contain_between_8_and_60_characters")
+    @NotBlank(message = "password_is_empty")
 
     private String password;
 
