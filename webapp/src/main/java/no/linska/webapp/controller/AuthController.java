@@ -53,8 +53,7 @@ public class AuthController {
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequestDto loginRequest, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            System.out.println("BINDING RESULT ERROR");
-            System.out.println(bindingResult.getAllErrors());
+            return ResponseEntity.badRequest().body(new CodeResponse("login_failure"));
         }
 
         Authentication authentication = authenticationManager.authenticate(
