@@ -1,9 +1,12 @@
 package no.linska.webapp.controller;
 
 import no.linska.webapp.exception.DataException;
+import no.linska.webapp.responses.CodeResponse;
 import org.hibernate.TransientPropertyValueException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -57,6 +60,18 @@ public class ExceptionHandlingController {
         );
         LOGGER.log(Level.SEVERE,ex.toString());
         return "/error";
+    }
+
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<?> handleBadCredentials(HttpServletRequest req, Exception ex) {
+        LOGGER.log(Level.SEVERE,req.toString()
+
+
+        );
+        LOGGER.log(Level.SEVERE,ex.toString());
+        return ResponseEntity.badRequest().body(new CodeResponse("invalid_credentials"));
     }
 
 
