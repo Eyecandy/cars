@@ -60,7 +60,7 @@ public class RestPriceRequestOrderController {
         PriceRequestOrder priceRequestOrder = priceRequestOrderService.getPriceRequestOrder(priceRequestOrderId);
         PriceRequest priceRequest = priceRequestOrder.getPriceRequest();
         User user = priceRequest.getUser();
-        var buyer = buyerService.getBuerByUserId(user.getId());
+        var buyer = buyerService.getBuyerByUserId(user.getId());
         var buyerUserDto = new BuyerUserDto();
         buyerUserDto.setEmail(user.getEmail());
         buyerUserDto.setFirstName(user.getFirstName());

@@ -1,6 +1,7 @@
 package no.linska.webapp.controller;
 
 
+import no.linska.webapp.dto.BuyerUserDto;
 import no.linska.webapp.dto.OfferAcceptedDto;
 import no.linska.webapp.dto.PriceRequestDto;
 import no.linska.webapp.dto.PriceRequestStatsDto;
@@ -50,6 +51,9 @@ public class RestPriceRequestController {
     @Autowired
     PriceRequestOrderService priceRequestOrderService;
 
+    @Autowired
+    BuyerService buyerService;
+
 
 
 
@@ -75,15 +79,18 @@ public class RestPriceRequestController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createPriceRequest(@RequestPart PriceRequestDto priceRequestDTO,
+    public ResponseEntity<?> createPriceRequest(@Valid @RequestPart PriceRequestDto priceRequestDTO,
+                                                @Valid @RequestPart BuyerUserDto buyerUserDto,
                                                 @RequestPart(value="file", required = false) MultipartFile multipartFile,
                                                 BindingResult  bindingResult) throws InterruptedException {
-
 
         if (bindingResult.hasErrors()) {
             System.out.println(bindingResult.getAllErrors());
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
+
+        buyerService.updateBuyerInfo(buyerUserDto);
+
         PriceRequest priceRequest = new PriceRequest();
 
 

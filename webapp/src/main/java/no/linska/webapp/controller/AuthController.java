@@ -112,7 +112,7 @@ public class AuthController {
         userService.register(user);
         Buyer buyer = new Buyer();
         buyer.setUser(user);
-        buyerService.save(buyer);
+        buyerService.create(buyer);
 
 
         storageService.createUserDir(user.getId().toString());

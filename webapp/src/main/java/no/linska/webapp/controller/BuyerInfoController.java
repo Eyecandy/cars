@@ -2,7 +2,6 @@ package no.linska.webapp.controller;
 
 
 import no.linska.webapp.dto.BuyerUserDto;
-import no.linska.webapp.entity.Buyer;
 import no.linska.webapp.entity.User;
 import no.linska.webapp.service.BuyerService;
 import no.linska.webapp.service.UserService;
@@ -29,19 +28,7 @@ public class BuyerInfoController {
         if (bindingResult.hasErrors()) {
             System.out.println(bindingResult.getAllErrors());
         }
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findByEmail(auth.getName());
-        user.setFirstName(buyerUserDto.getFirstName());
-        user.setLastName(buyerUserDto.getLastName());
-        user.setPhoneNumber(buyerUserDto.getPhoneNumber());
 
-        Buyer buyer = buyerService.getBuerByUserId(user.getId());
-        buyer.setCity(buyerUserDto.getCity());
-        buyer.setPostBox(buyerUserDto.getPostBox());
-        buyer.setStreetName(buyerUserDto.getStreetName());
-        buyer.setStreetNumber(buyerUserDto.getStreetNumber());
-
-        buyerService.save(buyer);
 
         return ResponseEntity.ok().body("success");
 
@@ -50,7 +37,7 @@ public class BuyerInfoController {
     public ResponseEntity<?> get() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findByEmail(auth.getName());
-        var buyer = buyerService.getBuerByUserId(user.getId());
+        var buyer = buyerService.getBuyerByUserId(user.getId());
         var buyerUserDto = new BuyerUserDto();
         buyerUserDto.setEmail(user.getEmail());
         buyerUserDto.setFirstName(user.getFirstName());
