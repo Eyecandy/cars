@@ -15,16 +15,6 @@
                 <span th:utext="${reg_conflict}"></span>
             </div>
 
-
-            <div class="form-group row">
-                <!--<label>Admin</label>-->
-                <!--<input type="radio" th:field="*{role}" th:value="1" />-->
-                <label>Buyer</label>
-                <input type="radio" th:field="*{userRole.id}" th:value=1  class="form-control"/>
-                <label>Seller</label>
-                <input type="radio" th:field="*{userRole.id}" th:value=2 class="form-control"/>
-            </div>
-
             <div class="form-group row">
                 <label class="col-4 col-form-label">E-post: </label>
                 <div class="col-8">
@@ -43,14 +33,6 @@
                 </div>
                 </div>
 
-            <div class="form-group row">
-                <label class="col-4 col-form-label">Gjenta Password: </label>
-                <div class="col-8">
-                    <input type="password" th:field="*{matchingPassword}" class="form-control"/>
-                    <p th:each="error : ${#fields.errors('matchingPassword')}"
-                       th:text="${error}">Validation error</p>
-                </div>
-            </div>
             <div th:if="${#fields.hasErrors('global')}">
                 <h3>Feil oppstod:</h3>
                 <p th:each="err : ${#fields.errors('global')}" th:text="${err}" class="error" />

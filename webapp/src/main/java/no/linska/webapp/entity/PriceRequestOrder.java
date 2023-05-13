@@ -1,6 +1,7 @@
 package no.linska.webapp.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ public class PriceRequestOrder {
 
     @OneToOne
     @JoinColumn(name = "seller_id")
+    @JsonIgnore
     private Seller seller;
 
 
@@ -29,5 +31,9 @@ public class PriceRequestOrder {
     private boolean sent = false;
 
     private boolean answered = false;
+
+    private String offerFilePath;
+
+    private boolean customerAcceptedThisOffer = false;
 
 }

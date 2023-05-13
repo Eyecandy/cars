@@ -27,6 +27,10 @@ values
 (10, 'Vestland'),
 (11, 'Viken')
 RETURNING county_id, county_name;
+-- tire options
+insert into tire_option (tire_option_id, name)
+values (1, 'Ingen vinterdekk') , (2, 'Piggdekk'), (3, 'Piggfritt')
+
 -- create config method
 insert into config_method (config_method_id, name)
 values (1, 'Link'), (2, 'PDF')

@@ -1,9 +1,7 @@
 package no.linska.webapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -17,8 +15,12 @@ public class PriceRequest {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
+    @Column(unique = true)
+    @NotNull
+    private String orderNumber;
+
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private User user;
 
     @NotNull(message = "Må velge bilmerke")
@@ -40,12 +42,21 @@ public class PriceRequest {
     @Column
     private String configuration;
 
-    @Transient
-    private MultipartFile fileConfiguration;
 
-    @Column
+    @NotNull
     private Date deadline;
 
-    @Column(name = "studded_tire")
-    private Boolean studdedTire;
+    @NotNull(message = "Dekk valg kan ikke være tom")
+    @OneToOne
+    @JoinColumn(name = "tire_option_id", nullable = false)
+    private TireOption tireOption;
+
+    @Column(name = "num_retailers_sent_to")
+    private Integer numRetailersSentTo;
+    @Column(name = "num_retailers_answered")
+    private Integer numRetailersAnswered;
+
+
+    private boolean customerHasAcceptedOffer = false;
+
 }
